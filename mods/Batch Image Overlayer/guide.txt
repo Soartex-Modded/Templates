@@ -1,0 +1,13 @@
+Script must be run in Linux or Cygwin with Imagemagick installed. If using Cygwin, checkmark the Imagemagick package in the installation program.
+
+The script takes a texture from the input folder, prepends the name of the texture to all of the files in the convert folder, then applies the texture as an overlay and places each in the output folder with the same file structure. The script continues through all files in the input folder.
+
+Credit to Justin_a for creating the script AND putting up with my questioning. Big thanks!
+
+
+
+Any file can go into the convert and input folders, meaning this can be used for ExtraTic and possibly other applications going forward.
+
+Already included in this setup is the greyscale Tinker's Construct textures and the overlays used to create each material.
+
+Some files are saved with a .png chunk incompatible with minecraft, meaning each file needs to be resaved to fix the alpha channel. This can be done quickly with BIMP, a batch image manipulation addon for Gimp.
