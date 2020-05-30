@@ -1,0 +1,13 @@
+{
+  "versions": {
+    "Soartex-1.7.x": {
+      "repository_dir": "/Users/michael/soartex/fanver/Modded-1.7.x/",
+      "output_dir": "/Users/michael/soartex/autogen/Modded-1.7.x/",
+      "pack_format": 1,
+      "links": [
+        "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Infinity Evolved 1.7/.minecraft/resourcepacks/Modded_Autogen"
+      ]
+    }
+  },
+  "active_version": "Soartex-1.7.x"
+}
