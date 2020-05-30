@@ -1,25 +1,3 @@
-"""
-Script to create and live-maintain a resource pack.
-This script will:
-- build a mod resource pack from a repository of mod patches
-- create symlinks from your game instances to the generated resource pack
-- watch for changes in the repository, and automatically modify the generated resource pack with those changes
-
-How to use:
-1. modify config.json to include
- - paths to repository clones
- - the directory to output the generated pack
- - locations to put symlinks to generated resource packs under game instances
-
-2. set the which version is active in the config
-3. install python 3.6 or greater
-4. open terminal and cd into the mergePacks directory
-5. pip3 install watchdog
-6. python3 live_merge.py
-
-Author: Shoeboxam
-"""
-
 import time
 from watchdog.observers import Observer
 from watchdog import events
