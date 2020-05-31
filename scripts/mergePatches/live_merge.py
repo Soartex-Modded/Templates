@@ -114,7 +114,7 @@ def watch_pack(config):
                     shutil.copyfile(event.src_path, src_path)
                 print(f"created: {relative_src_path}")
 
-            if event.event_type in events.EVENT_TYPE_MODIFIED:
+            if event.event_type == events.EVENT_TYPE_MODIFIED:
                 if event.is_directory:
                     return
                 else:
