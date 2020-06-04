@@ -1,0 +1,158 @@
+["default-modded-1.5.x"]
+mods_dirs = [
+    "~/soartex/default/Downloaded-Mods-1.5.x/"
+]
+patches_dir = "~/soartex/default/Modded-1.5.x/"
+pack_dir = "~/soartex_merged/default/Modded-1.5.x/"
+pack_format = 1
+
+
+["default-modded-1.7.x"]
+mods_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Infinity Evolved 1.7/mods",
+    "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/mods",
+    "~/soartex/default/Downloaded-Mods-1.7.x/"
+]
+patches_dir = "~/soartex/default/Modded-1.7.x/"
+pack_dir = "~/soartex_merged/default/Modded-1.7.x/"
+pack_format = 1
+
+["default-modded-1.10.x"]
+mods_dirs = [
+    "~/soartex/default/Downloaded-Mods-1.10.x/"
+]
+patches_dir = "~/soartex/default/Modded-1.10.x/"
+pack_dir = "~/soartex_merged/default/Modded-1.10.x/"
+pack_format = 2
+
+["default-modded-1.12.x"]
+mods_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Revelation/.minecraft/mods",
+    "~/soartex/default/Downloaded-Mods-1.12.x/"
+]
+patches_dir = "~/soartex/default/Modded-1.12.x/"
+pack_dir = "~/soartex_merged/default/Modded-1.12.x/"
+pack_format = 3
+
+["default-modded-1.15.x"]
+mods_dirs = [
+    "~/soartex/default/Downloaded-Mods-1.15.x/"
+]
+patches_dir = "~/soartex/default/Modded-1.15.x/"
+pack_dir = "~/soartex_merged/default/Modded-1.15.x/"
+pack_format = 5
+
+
+
+
+["fanver-modded-1.5.x"]
+download_repo = "git@github.com:Soartex-Modded/Modded-1.5.x.git"
+download_dir = "~/soartex/fanver/Modded-1.5.x/"
+patches_dir = "~/soartex/fanver/Modded-1.5.x/"
+pack_format = 1
+pack_dir = "~/soartex_merged/fanver/Modded-1.5.x/"
+
+["fanver-modded-1.7.x"]
+download_repo = "git@github.com:Soartex-Modded/Modded-1.7.x.git"
+download_dir = "~/soartex/fanver/Modded-1.7.x/"
+patches_dir = "~/soartex/fanver/Modded-1.7.x/"
+pack_dir = "~/soartex_merged/fanver/Modded-1.7.x/"
+pack_format = 1
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Infinity Evolved 1.7/.minecraft/resourcepacks/Fanver_Modded",
+    "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/resourcepacks/Fanver_Modded"
+]
+
+["fanver-modded-1.10.x"]
+download_repo = "git@github.com:Soartex-Modded/Modded-1.10.x.git"
+download_dir = "~/soartex/fanver/Modded-1.10.x/"
+patches_dir = "~/soartex/fanver/Modded-1.10.x/"
+pack_dir = "~/soartex_merged/fanver/Modded-1.10.x/"
+pack_format = 2
+
+["fanver-modded-1.12.x"]
+download_repo = "git@github.com:Soartex-Modded/Modded-1.12.x.git"
+download_dir = "~/soartex/fanver/Modded-1.12.x/"
+patches_dir = "~/soartex/fanver/Modded-1.12.x/"
+pack_dir = "~/soartex_merged/fanver/Modded-1.12.x/"
+pack_format = 3
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Revelation/.minecraft/resourcepacks/Modded_Fanver"
+]
+
+["fanver-modded-1.15.x"]
+patches_dir = "~/soartex/fanver/Modded-1.15.x/"
+pack_dir = "~/soartex_merged/fanver/Modded-1.15.x/"
+pack_format = 5
+
+
+
+
+
+
+["fanver-vanilla-1.7.x"]
+download_project_id = 42794
+download_file_id = 2208964
+download_dir = "~/soartex/fanver/Vanilla-1.7.x/"
+pack_dir = "~/soartex/fanver/Vanilla-1.7.x/"
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Infinity Evolved 1.7/.minecraft/resourcepacks/Fanver_Vanilla",
+    "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/resourcepacks/Fanver_Vanilla"
+]
+
+["fanver-vanilla-1.12.x"]
+download_project_id = 42794
+download_file_id = 2544544
+download_dir = "~/soartex/fanver/Vanilla-1.12.x/"
+pack_dir = "~/soartex/fanver/Vanilla-1.12.x/"
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Revelation/.minecraft/resourcepacks/Vanilla_Fanver"
+]
+
+["invictus-vanilla-1.7.x"]
+download_project_id = 220720
+download_file_id = 2218998
+download_dir = "~/soartex/invictus/Vanilla-1.7.x/"
+pack_dir = "~/soartex/invictus/Vanilla-1.7.x/"
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Infinity Evolved 1.7/.minecraft/resourcepacks/Vanilla_Invictus",
+    "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/resourcepacks/Vanilla_Invictus"
+]
+
+["invictus-vanilla-1.12.x"]
+download_project_id = 220720
+download_file_id = 2492453
+download_dir = "~/soartex/invictus/Vanilla-1.12.x/"
+pack_dir = "~/soartex/invictus/Vanilla-1.12.x/"
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Revelation/.minecraft/resourcepacks/Vanilla_Invictus"
+]
+
+["invictus-modded-1.7.x"]
+download_repo = "git@github.com:InvictusGraphics/Modded-1.7.x.git"
+download_dir = "~/soartex/invictus/Modded-1.7.x/"
+patches_dir = "~/soartex/invictus/Modded-1.7.x/"
+pack_format = 1
+pack_dir = "~/soartex_merged/invictus/Modded-1.7.x/"
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Infinity Evolved 1.7/.minecraft/resourcepacks/Modded_Invictus",
+    "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/resourcepacks/Modded_Invictus"
+]
+
+["fanver-modded-base"]
+download_repo = "git@github.com:Soartex-Modded/Soartex-Modded-Base.git"
+download_dir = "~/soartex/fanver/Modded-Base/Soartex-Modded-Base/"
+patches_dir = "~/soartex/fanver/Modded-Base/"
+pack_dir = "~/soartex_merged/fanver/Modded-Base/"
+pack_format = 3
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Revelation/.minecraft/resourcepacks/Modded_Fanver_Base"
+]
+
+["gtnh-1.7.x"]
+download_repo = "https://github.com/GTNewHorizons/GTNH-Soartex-Overrides.git"
+download_dir = "~/soartex/fanver/GTNH-Soartex-Overrides/"
+pack_dir = "~/soartex/fanver/GTNH-Soartex-Overrides/resourcepacks/GTNH-Soartex-Overrides/"
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/resourcepacks/GTNH_Overrides"
+]

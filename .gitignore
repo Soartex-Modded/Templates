@@ -22,3 +22,4 @@ Icon
 # SyncToy
 SyncToy*
 .idea/
+__pycache__/

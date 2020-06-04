@@ -1,0 +1,232 @@
+# to run any of these, follow the setup instructions, then call `soartex [pipeline task]`. For example:
+# > soartex 1.7_dev
+
+
+download_all_resources = [
+    # mods
+#    {task = "run_pipeline", pipeline = "download_1k_mods"},
+
+    # fanver mods
+    {task = "download_resource", resource = "fanver-modded-1.5.x"},
+    {task = "download_resource", resource = "fanver-modded-1.7.x"},
+    {task = "download_resource", resource = "fanver-modded-1.10.x"},
+    {task = "download_resource", resource = "fanver-modded-1.12.x"},
+
+    # vanilla packs
+    {task = "download_resource", resource = "fanver-vanilla-1.7.x"},
+    {task = "download_resource", resource = "fanver-vanilla-1.12.x"},
+    {task = "download_resource", resource = "invictus-vanilla-1.7.x"},
+    {task = "download_resource", resource = "invictus-vanilla-1.12.x"},
+
+    # misc
+    {task = "download_resource", resource = "fanver-modded-base"},
+    {task = "download_resource", resource = "gtnh-1.7.x"},
+    {task = "download_resource", resource = "invictus-modded-1.7.x"},
+]
+
+extract_all = [
+    {task = "extract_default", resource = "default-modded-1.5.x"},
+    {task = "extract_default", resource = "default-modded-1.7.x"},
+    {task = "extract_default", resource = "default-modded-1.10.x"},
+    {task = "extract_default", resource = "default-modded-1.12.x"},
+    {task = "extract_default", resource = "default-modded-1.15.x"},
+]
+
+merge_all_default = [
+    {task = "merge_patches", resource = "default-modded-1.5.x"},
+    {task = "merge_patches", resource = "default-modded-1.7.x"},
+    {task = "merge_patches", resource = "default-modded-1.10.x"},
+    {task = "merge_patches", resource = "default-modded-1.12.x"},
+    {task = "merge_patches", resource = "default-modded-1.15.x"},
+]
+
+merge_all_fanver = [
+    {task = "merge_patches", resource = "fanver-modded-1.5.x"},
+    {task = "merge_patches", resource = "fanver-modded-1.7.x"},
+    {task = "merge_patches", resource = "fanver-modded-1.10.x"},
+    {task = "merge_patches", resource = "fanver-modded-1.12.x"},
+]
+
+merge_all = [
+    {task = "run_pipeline", pipeline = "merge_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_fanver"},
+    {task = "merge_patches", resource = "invictus-modded-1.7.x"},
+]
+
+port_all = [
+    {task = "run_pipeline", pipeline = "1.5_to_1.5_port" },
+    {task = "run_pipeline", pipeline = "1.5_to_1.7_port" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.7_port" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.10_port" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.10_port" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.12_port" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.12_port" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.12_port" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.15_port" }
+]
+
+prune_all = [
+    {task = "prune_files", resource = "default-modded-1.5.x", pruned_dir = "~/soartex/fanver/Pruned-1.5.x"},
+    {task = "prune_files", resource = "default-modded-1.7.x", pruned_dir = "~/soartex/fanver/Pruned-1.7.x"},
+    {task = "prune_files", resource = "default-modded-1.10.x", pruned_dir = "~/soartex/fanver/Pruned-1.10.x"},
+    {task = "prune_files", resource = "default-modded-1.12.x", pruned_dir = "~/soartex/fanver/Pruned-1.12.x"},
+]
+
+omni_update = [
+    {task = "run_pipeline", pipeline = "download_all_resources"},
+    {task = "run_pipeline", pipeline = "extract_all" },
+    {task = "run_pipeline", pipeline = "merge_all" },
+    {task = "run_pipeline", pipeline = "internal_port_all" },
+    {task = "run_pipeline", pipeline = "cross_port_all" },
+    {task = "run_pipeline", pipeline = "prune_all" }
+]
+
+"1.7_merge_fanver" = [
+    {task = "remove_resource", resource = "fanver-modded-1.7.x", folder = "pack_dir"},
+    {task = "merge_patches", resource = "fanver-modded-1.7.x"},
+]
+
+"1.7_extract" = [
+    {task = "remove_resource", resource = "default-modded-1.7.x", folder = "pack_dir"},
+    {task = "extract_default", resource = "default-modded-1.7.x"},
+    {task = "merge_patches", resource = "default-modded-1.7.x"}
+]
+
+"1.7_dev" = [
+#    {task = "extract_default", resource = "default-modded-1.7.x"},
+
+    # build merged resource packs from the patch directories
+    {task = "merge_patches", resource = "fanver-modded-1.7.x"},
+    {task = "merge_patches", resource = "invictus-modded-1.7.x"},
+
+    # link all texture packs with relevant game instances
+    {task = "link_resources", resource = "fanver-vanilla-1.7.x"},
+    {task = "link_resources", resource = "fanver-modded-1.7.x"},
+    {task = "link_resources", resource = "invictus-vanilla-1.7.x"},
+    {task = "link_resources", resource = "invictus-modded-1.7.x"},
+    {task = "link_resources", resource = "gtnh-1.7.x"},
+
+    # watch for changes/update merged packs in any of the specified resources
+    {task = "watch_changes", resources = ["fanver-modded-1.7.x", "invictus-modded-1.7.x"]}
+]
+
+"1.12_dev" = [
+#    {task = "extract_default", resource = "default-modded-1.12.x"},
+
+    # build merged resource packs from the patch directories
+    {task = "merge_patches", resource = "fanver-modded-1.12.x"},
+    {task = "merge_patches", resource = "fanver-modded-base"},
+
+    # link all texture packs with relevant game instances
+    {task = "link_resources", resource = "invictus-vanilla-1.12.x"},
+    {task = "link_resources", resource = "fanver-vanilla-1.12.x"},
+    {task = "link_resources", resource = "fanver-modded-base"},
+    {task = "link_resources", resource = "fanver-modded-1.12.x"},
+
+    # watch for changes/update merged packs in any of the specified resources
+    {task = "watch_changes", resources = ["fanver-modded-base", "fanver-modded-1.12.x"]}
+]
+
+"1.12_extract" = [
+    {task = "extract_default", resource = "default-modded-1.12.x"},
+    {task = "merge_patches", resource = "default-modded-1.12.x"}
+]
+
+"1.7_prune" = [
+#    {task = "run_pipeline", pipeline = "1.12_extract"},
+    {task = "prune_files", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/soartex/fanver/Pruned-1.7.x", action = "none"}
+]
+
+"1.12_prune" = [
+#    {task = "run_pipeline", pipeline = "1.12_extract"},
+    {task = "prune_files", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", action = "none"}
+]
+
+[["download_1k_mods"]]
+# up to 1000 mods for each of the five minor versions of minecraft
+task = "download_mods"
+database_path = "~/soartex/manager/manager.db"
+mod_limit = 1000
+["download_1k_mods".mods_dirs]
+5 = "~/soartex/default/Downloaded-Mods-1.5.x/"
+7 = "~/soartex/default/Downloaded-Mods-1.7.x/"
+10 = "~/soartex/default/Downloaded-Mods-1.10.x/"
+12 = "~/soartex/default/Downloaded-Mods-1.12.x/"
+15 = "~/soartex/default/Downloaded-Mods-1.15.x/"
+
+
+# INTERNAL VERSION PORTS
+# for textures with duplicates
+[["1.5_to_1.5_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.5.x"
+default_post = "default-modded-1.5.x"
+resource_prior = "fanver-modded-1.5.x"
+resource_post = "fanver-modded-1.5.x"
+action = "copy"
+
+[["1.7_to_1.7_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "fanver-modded-1.7.x"
+resource_post = "fanver-modded-1.7.x"
+action = "copy"
+
+[["1.10_to_1.10_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.10.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "fanver-modded-1.10.x"
+resource_post = "fanver-modded-1.10.x"
+action = "copy"
+
+[["1.12_to_1.12_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "fanver-modded-1.12.x"
+resource_post = "fanver-modded-1.12.x"
+action = "copy"
+
+
+# CROSS VERSION PORTS
+[["1.5_to_1.7_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.5.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "fanver-modded-1.5.x"
+resource_post = "fanver-modded-1.7.x"
+action = "copy"
+
+[["1.7_to_1.10_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "fanver-modded-1.7.x"
+resource_post = "fanver-modded-1.10.x"
+action = "copy"
+
+[["1.7_to_1.12_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "fanver-modded-1.7.x"
+resource_post = "fanver-modded-1.12.x"
+action = "copy"
+
+[["1.10_to_1.12_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.10.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "fanver-modded-1.10.x"
+resource_post = "fanver-modded-1.12.x"
+action = "copy"
+
+[["1.12_to_1.15_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.15.x"
+resource_prior = "fanver-modded-1.12.x"
+resource_post = "fanver-modded-1.15.x"
+action = "copy"
