@@ -4,7 +4,7 @@
 
 download_all_resources = [
     # mods
-#    {task = "run_pipeline", pipeline = "download_1k_mods"},
+    {task = "run_pipeline", pipeline = "download_1k_mods"},
 
     # fanver mods
     {task = "download_resource", resource = "fanver-modded-1.5.x"},
@@ -65,6 +65,13 @@ port_all = [
     {task = "run_pipeline", pipeline = "1.12_to_1.15_port" }
 ]
 
+back_port_all = [
+    {task = "run_pipeline", pipeline = "1.12_to_1.10_port" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.7_port" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.7_port" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.5_port" },
+]
+
 prune_all = [
     {task = "prune_files", resource = "default-modded-1.5.x", pruned_dir = "~/soartex/fanver/Pruned-1.5.x"},
     {task = "prune_files", resource = "default-modded-1.7.x", pruned_dir = "~/soartex/fanver/Pruned-1.7.x"},
@@ -76,8 +83,8 @@ omni_update = [
     {task = "run_pipeline", pipeline = "download_all_resources"},
     {task = "run_pipeline", pipeline = "extract_all" },
     {task = "run_pipeline", pipeline = "merge_all" },
-    {task = "run_pipeline", pipeline = "internal_port_all" },
-    {task = "run_pipeline", pipeline = "cross_port_all" },
+    {task = "run_pipeline", pipeline = "port_all" },
+    {task = "run_pipeline", pipeline = "back_port_all" },
     {task = "run_pipeline", pipeline = "prune_all" }
 ]
 
@@ -229,4 +236,38 @@ default_prior = "default-modded-1.12.x"
 default_post = "default-modded-1.15.x"
 resource_prior = "fanver-modded-1.12.x"
 resource_post = "fanver-modded-1.15.x"
+action = "copy"
+
+
+# CROSS VERSION BACK PORTS
+[["1.12_to_1.10_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "fanver-modded-1.12.x"
+resource_post = "fanver-modded-1.10.x"
+action = "copy"
+
+[["1.10_to_1.7_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.10.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "fanver-modded-1.10.x"
+resource_post = "fanver-modded-1.1.x"
+action = "copy"
+
+[["1.12_to_1.7_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "fanver-modded-1.12.x"
+resource_post = "fanver-modded-1.7.x"
+action = "copy"
+
+[["1.7_to_1.5_port"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.5.x"
+resource_prior = "fanver-modded-1.7.x"
+resource_post = "fanver-modded-1.5.x"
 action = "copy"

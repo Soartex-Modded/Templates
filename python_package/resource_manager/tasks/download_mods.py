@@ -1,11 +1,11 @@
+import json
 
 import requests
-from urllib.parse import urlparse
 
 import os
 import math
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, Integer, MetaData
+from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy.sql import select
 
 
@@ -18,7 +18,12 @@ def download_mods(mods_dirs, database_path, mod_limit=100):
     :param mod_limit: maximum number of mods to collect
     """
 
+    mods_dirs = {k: os.path.expanduser(v) for k, v in mods_dirs.items()}
+    database_path = os.path.expanduser(database_path)
+
+    patch_info = {}
     for minor_version in mods_dirs:
+        patch_info[minor_version] = {}
         os.makedirs(mods_dirs[minor_version], exist_ok=True)
     os.makedirs(os.path.dirname(database_path), exist_ok=True)
 
@@ -26,12 +31,10 @@ def download_mods(mods_dirs, database_path, mod_limit=100):
     metadata = MetaData()
     mod_files = Table('mod_files', metadata,
                       Column('id', Integer, primary_key=True),
-                      Column('file_id', Integer),
+                      Column('file_name', String(250)),
                       Column('mod_id', Integer),
                       Column('vanilla_minor_version', Integer))
     metadata.create_all(engine)
-
-    conn = engine.connect()
 
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
@@ -46,8 +49,6 @@ def download_mods(mods_dirs, database_path, mod_limit=100):
             "https://addons-ecs.forgesvc.net/api/v2/addon/search/",
             params={
                 'gameId': 432,
-                'sectionId': -1,
-                'categoryId': -1,
                 'index': page_index * page_size,
                 'pageSize': page_size,
                 'sort': 'TotalDownloads',
@@ -59,6 +60,9 @@ def download_mods(mods_dirs, database_path, mod_limit=100):
             mod_count += 1
             if mod_count > mod_limit:
                 return
+
+            if mod_meta['categorySection']['name'] != 'Mods':
+                continue
 
             versioned_mod_files = {}
             for mod_file_meta in mod_meta['gameVersionLatestFiles']:
@@ -83,39 +87,55 @@ def download_mods(mods_dirs, database_path, mod_limit=100):
 
                 mod_file_meta = versioned_mod_files[minor_version]['value']
 
-                available_file_id = mod_file_meta['projectFileId']
-                stored_file_id = conn.execute(select([mod_files.c.file_id])
-                             .where((mod_files.c.mod_id == mod_meta['id'])
-                                    & (mod_files.c.vanilla_minor_version == minor_version))).scalar()
+                patch_info[str(minor_version)][mod_file_meta["projectFileName"]] = {
+                    "mod_id": mod_meta['slug'],
+                    "mod_name": mod_meta['name'],
+                    # typically contains the mod version inside somewhere
+                    "mod_filename": mod_file_meta['projectFileName'],
+                    "mc_version": mod_file_meta['gameVersion'],
+                    "mod_authors": [auth['name'] for auth in mod_meta['authors']],
+                    "url_website": mod_meta['websiteUrl'],
+                    "description": mod_meta.get('summary')
+                }
 
-                if stored_file_id == available_file_id:
+                available_file_name = mod_file_meta['projectFileName']
+
+                stored_file_name = engine.execute(select([mod_files.c.file_name])
+                    .where((mod_files.c.mod_id == mod_meta['id']) & (mod_files.c.vanilla_minor_version == minor_version))).scalar()
+
+                if stored_file_name == available_file_name:
                     # file is already current
                     # print(f'Skipping {mod_meta["name"]} for 1.{minor_version}')
                     continue
 
-                if available_file_id is None:
-                    # file is unavailable
+                mod_path = os.path.join(mods_dirs[str(minor_version)], mod_file_meta['projectFileName'])
+
+                if os.path.exists(mod_path):
+                    engine.execute(mod_files.insert(),
+                                   file_name=available_file_name,
+                                   mod_id=mod_meta['id'],
+                                   vanilla_minor_version=minor_version)
                     continue
 
                 download_url = requests.get(
-                    f"https://addons-ecs.forgesvc.net/api/v2/addon/{mod_meta['id']}/file/{available_file_id}/download-url",
+                    f"https://addons-ecs.forgesvc.net/api/v2/addon/{mod_meta['id']}/file/{mod_file_meta['projectFileId']}/download-url",
                     headers=headers).text
-
-                if not download_url.endswith('.jar'):
-                    continue
 
                 print(f'Downloading {mod_meta["name"]} for 1.{minor_version}')
 
-                mod_path = os.path.join(mods_dirs[str(minor_version)], os.path.basename(urlparse(download_url).path))
                 with open(mod_path, 'wb') as mod_file:
                     mod_file.write(requests.get(download_url, headers=headers).content)
 
-                if stored_file_id is None:
-                    conn.execute(mod_files.insert(),
-                                 file_id=available_file_id,
-                                 mod_id=mod_meta['id'],
-                                 vanilla_minor_version=minor_version)
+                if stored_file_name is None:
+                    engine.execute(mod_files.insert(),
+                                   file_name=available_file_name,
+                                   mod_id=mod_meta['id'],
+                                   vanilla_minor_version=minor_version)
                 else:
-                    conn.execute(mod_files.update()
-                                 .where(mod_id=mod_meta['id'], vanilla_minor_version=minor_version)
-                                 .values(file_id=available_file_id))
+                    engine.execute(mod_files.update()
+                                   .where(mod_id=mod_meta['id'], vanilla_minor_version=minor_version)
+                                   .values(file_name=available_file_name))
+
+    for minor_version in patch_info:
+        with open(os.path.join(mods_dirs[str(minor_version)], "patch_info.json"), 'w') as patch_info_file:
+            json.dump(patch_info[minor_version], patch_info_file, indent=4)

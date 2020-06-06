@@ -8,20 +8,38 @@ import json
 
 def run_pipeline(config, resources, pipelines):
     print(f"Running pipeline: {config['pipeline']}.")
+    task_runners = {
+        'extract_default': run_extract_default,
+        'merge_patches': run_merge_patches,
+        'link_resources': run_link_resource,
+        'watch_changes': run_watch_changes,
+        'port_patches': run_port_patches,
+        'prune_files': run_prune_files,
+        'download_mods': run_download_mods,
+        'download_resource': run_download_resource,
+        'run_pipeline': run_pipeline,
+        'run_parallel': run_parallel
+    }
+
+    if config['pipeline'] not in pipelines:
+        # if any individual task is passed to the run_pipeline task, direct it to the proper task
+        if config['task'] in task_runners:
+            task_runners[config['task']](config, resources, pipelines)
+        else:
+            raise ValueError(f"Pipeline not recognized: {config['pipeline']}")
+
+    # run every step in the pipeline
+    for task in pipelines[config['pipeline']]:
+        task_runners[task['task']](task, resources, pipelines)
+
+
+def run_parallel(config, resources, pipelines):
+    # This task probably doesn't have great benefits, as most of these tasks are bound by disk transfer
+    print(f"Running in parallel: {config['pipeline']}.")
     if config['pipeline'] not in pipelines:
         raise ValueError(f"Pipeline not recognized: {config['pipeline']}")
-    for task in pipelines[config['pipeline']]:
-        {
-            'extract_default': run_extract_default,
-            'merge_patches': run_merge_patches,
-            'link_resources': run_link_resource,
-            'watch_changes': run_watch_changes,
-            'port_patches': run_port_patches,
-            'prune_files': run_prune_files,
-            'download_mods': run_download_mods,
-            'download_resource': run_download_resource,
-            'run_pipeline': run_pipeline,
-        }[task['task']](task, resources, pipelines)
+
+    tasks.parallel(pipelines[config['pipeline']], run_pipeline, args=(resources, pipelines))
 
 
 def run_extract_default(config, resources, pipelines):
@@ -66,6 +84,7 @@ def run_port_patches(config, resources, pipelines):
         resource_prior_patches_dir=resources[config['resource_prior']]['patches_dir'],
         resource_post_patches_dir=resources[config['resource_post']]['patches_dir'],
         resource_post_dir=resources[config['resource_post']]['pack_dir'],
+        default_post_patches_dir=resources[config['default_post']]['patches_dir'],
         action=config.get('action')
     )
 

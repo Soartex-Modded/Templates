@@ -15,6 +15,7 @@ def merge_patches(patches_dir, pack_dir, pack_format):
         shutil.rmtree(pack_dir)
 
     os.makedirs(pack_dir, exist_ok=True)
+    os.makedirs(patches_dir, exist_ok=True)
 
     # copy all mods into resource pack
     for mod_name in os.listdir(patches_dir):

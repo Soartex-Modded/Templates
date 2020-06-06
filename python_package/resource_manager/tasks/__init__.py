@@ -6,3 +6,4 @@ from .extract_default import *
 from .port_patches import *
 from .prune_files import *
 from .download_resource import *
+from .parallel import *
