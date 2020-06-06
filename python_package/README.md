@@ -2,7 +2,7 @@
 Utilities to update and maintain repositories of mod resource pack patches.
 
 ## Entry Points
-This package adds a terminal entry point called `soartex`. 
+This package adds a terminal entry point called `resource_manage`. 
 The entry point runs pipelines of tasks.
 A list of preset pipelines is available in `configs/pipelines.toml`.
 Additional pipelines may be added or prior pipelines may be modified.
@@ -46,9 +46,9 @@ The default resources.toml contains all the necessary info for automatically col
 2. pip3 install -e .
 
 ## How to use
-Type `soartex [pipeline_name]` from the terminal to invoke the specified pipeline.
+Type `resource_manage [pipeline_name]` from the terminal to invoke the specified pipeline.
 
-For example, a useful pipeline is `soartex 1.7_dev`, which starts a watcher to maintain a resource pack with edits to patches.
+For example, a useful pipeline is `resource_manage 1.7_dev`, which starts a watcher to maintain a resource pack with edits to patches.
 F3+T from any linked game instances.
 You may want to edit the links in the `resources.toml` to symlink the maintained pack into your minecraft instance.
 

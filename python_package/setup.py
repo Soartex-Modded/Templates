@@ -13,7 +13,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'soartex = resource_manager.main:main',
+            'resource_manage = resource_manager.main:main',
         ],
     },
 )

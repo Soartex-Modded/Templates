@@ -206,6 +206,9 @@ def port_patches(
 
             prior_resource_meta_path = prior_resource_path + '.mcmeta'
             if os.path.exists(prior_resource_meta_path):
+                print(f'{action}: {prior_resource_meta_path.replace(resource_prior_patches_dir, "")}\n'
+                      f'   -> {os.path.join(patch_name, *post_resource_path.replace(resource_post_patches_dir, "").split(os.sep))}')
+
                 if action == 'move':
                     shutil.move(prior_resource_meta_path, post_resource_path + '.mcmeta')
                 if action == 'copy':
@@ -253,4 +256,3 @@ def port_patches(
 
     if os.path.exists(os.path.join(resource_post_patches_dir, UNKNOWN_PATCH_NAME)):
         print("Check the _UNKNOWN folder for textures ported into domains that did not belong to a previous patch.")
-

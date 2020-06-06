@@ -1,20 +1,28 @@
-# to run any of these, follow the setup instructions, then call `soartex [pipeline task]`. For example:
-# > soartex 1.7_dev
+# to run any of these, follow the setup instructions, then call `resource_manage [pipeline task]`. For example:
+# > resource_manage 1.7_dev_soartex
 
-
-download_all_resources = [
+download_default = [
     # mods
     {task = "run_pipeline", pipeline = "download_1k_mods"},
 
-    # fanver mods
+    # vanilla packs
+    {task = "download_resource", resource = "default-vanilla-1.5.x"},
+    {task = "download_resource", resource = "default-vanilla-1.7.x"},
+    {task = "download_resource", resource = "default-vanilla-1.10.x"},
+    {task = "download_resource", resource = "default-vanilla-1.12.x"},
+]
+
+download_soartex = [
     {task = "download_resource", resource = "fanver-modded-1.5.x"},
     {task = "download_resource", resource = "fanver-modded-1.7.x"},
     {task = "download_resource", resource = "fanver-modded-1.10.x"},
     {task = "download_resource", resource = "fanver-modded-1.12.x"},
 
-    # vanilla packs
+    {task = "download_resource", resource = "fanver-vanilla-1.5.x"},
     {task = "download_resource", resource = "fanver-vanilla-1.7.x"},
+    {task = "download_resource", resource = "fanver-vanilla-1.10.x"},
     {task = "download_resource", resource = "fanver-vanilla-1.12.x"},
+
     {task = "download_resource", resource = "invictus-vanilla-1.7.x"},
     {task = "download_resource", resource = "invictus-vanilla-1.12.x"},
 
@@ -24,7 +32,24 @@ download_all_resources = [
     {task = "download_resource", resource = "invictus-modded-1.7.x"},
 ]
 
-extract_all = [
+download_jstr = [
+    {task = "download_resource", resource = "jstr-modded-1.5.x"},
+    {task = "download_resource", resource = "jstr-modded-1.7.x"},
+    {task = "download_resource", resource = "jstr-modded-1.10.x"},
+    {task = "download_resource", resource = "jstr-modded-1.12.x"},
+
+    {task = "download_resource", resource = "jstr-vanilla-1.7.x"},
+    {task = "download_resource", resource = "jstr-vanilla-1.10.x"},
+    {task = "download_resource", resource = "jstr-vanilla-1.12.x"},
+]
+
+download_all = [
+    {task = "run_pipeline", resource = "download_default"},
+    {task = "run_pipeline", resource = "download_soartex"},
+    {task = "run_pipeline", resource = "download_jstr"}
+]
+
+extract_all_default = [
     {task = "extract_default", resource = "default-modded-1.5.x"},
     {task = "extract_default", resource = "default-modded-1.7.x"},
     {task = "extract_default", resource = "default-modded-1.10.x"},
@@ -40,52 +65,110 @@ merge_all_default = [
     {task = "merge_patches", resource = "default-modded-1.15.x"},
 ]
 
-merge_all_fanver = [
+merge_all_soartex = [
     {task = "merge_patches", resource = "fanver-modded-1.5.x"},
     {task = "merge_patches", resource = "fanver-modded-1.7.x"},
     {task = "merge_patches", resource = "fanver-modded-1.10.x"},
     {task = "merge_patches", resource = "fanver-modded-1.12.x"},
-]
-
-merge_all = [
-    {task = "run_pipeline", pipeline = "merge_all_default"},
-    {task = "run_pipeline", pipeline = "merge_all_fanver"},
     {task = "merge_patches", resource = "invictus-modded-1.7.x"},
 ]
 
-port_all = [
-    {task = "run_pipeline", pipeline = "1.5_to_1.5_port" },
-    {task = "run_pipeline", pipeline = "1.5_to_1.7_port" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.7_port" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.10_port" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.10_port" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.12_port" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.12_port" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.12_port" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.15_port" }
+merge_all_jstr = [
+    {task = "merge_patches", resource = "jstr-modded-1.5.x"},
+    {task = "merge_patches", resource = "jstr-modded-1.7.x"},
+    {task = "merge_patches", resource = "jstr-modded-1.10.x"},
+    {task = "merge_patches", resource = "jstr-modded-1.12.x"},
 ]
 
-back_port_all = [
-    {task = "run_pipeline", pipeline = "1.12_to_1.10_port" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.7_port" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.7_port" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.5_port" },
+port_all_fanver = [
+    {task = "run_pipeline", pipeline = "1.5_to_1.5_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.5_to_1.7_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.7_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.10_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.10_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.12_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.12_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.12_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.15_port_fanver" }
 ]
 
-prune_all = [
-    {task = "prune_files", resource = "default-modded-1.5.x", pruned_dir = "~/soartex/fanver/Pruned-1.5.x"},
-    {task = "prune_files", resource = "default-modded-1.7.x", pruned_dir = "~/soartex/fanver/Pruned-1.7.x"},
-    {task = "prune_files", resource = "default-modded-1.10.x", pruned_dir = "~/soartex/fanver/Pruned-1.10.x"},
-    {task = "prune_files", resource = "default-modded-1.12.x", pruned_dir = "~/soartex/fanver/Pruned-1.12.x"},
+back_port_all_fanver = [
+    {task = "run_pipeline", pipeline = "1.12_to_1.10_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.7_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.7_port_fanver" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.5_port_fanver" },
+]
+
+port_all_jstr = [
+    {task = "run_pipeline", pipeline = "1.5_to_1.5_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.5_to_1.7_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.7_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.10_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.10_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.12_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.12_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.12_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.15_port_jstr" }
+]
+
+back_port_all_jstr = [
+    {task = "run_pipeline", pipeline = "1.12_to_1.10_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.10_to_1.7_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.12_to_1.7_port_jstr" },
+    {task = "run_pipeline", pipeline = "1.7_to_1.5_port_jstr" },
+]
+
+prune_all_fanver = [
+    {task = "prune_files", action = "move", resource = "fanver-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/fanver/Pruned-1.5.x"},
+    {task = "prune_files", action = "move", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x"},
+    {task = "prune_files", action = "move", resource = "fanver-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/fanver/Pruned-1.10.x"},
+    {task = "prune_files", action = "move", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/fanver/Pruned-1.12.x"},
+]
+
+prune_all_jstr = [
+    {task = "prune_files", action = "move", resource = "jstr-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/jstr/Pruned-1.5.x"},
+    {task = "prune_files", action = "move", resource = "jstr-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/jstr/Pruned-1.7.x"},
+    {task = "prune_files", action = "move", resource = "jstr-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/jstr/Pruned-1.10.x"},
+    {task = "prune_files", action = "move", resource = "jstr-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/jstr/Pruned-1.12.x"},
+]
+
+omni_update_soartex = [
+    {task = "run_pipeline", pipeline = "download_default"},
+    {task = "run_pipeline", pipeline = "download_soartex"},
+    {task = "run_pipeline", pipeline = "extract_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_soartex"},
+    {task = "run_pipeline", pipeline = "port_all_fanver" },
+    {task = "run_pipeline", pipeline = "back_port_all_fanver" },
+    {task = "run_pipeline", pipeline = "prune_all_fanver" }
+]
+
+omni_update_jstr = [
+#    {task = "run_pipeline", pipeline = "download_default"},
+    {task = "run_pipeline", pipeline = "download_jstr"},
+#    {task = "run_pipeline", pipeline = "extract_all_default"},
+#    {task = "run_pipeline", pipeline = "merge_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_jstr"},
+    {task = "run_pipeline", pipeline = "port_all_jstr" },
+    {task = "run_pipeline", pipeline = "back_port_all_jstr" },
+    {task = "run_pipeline", pipeline = "prune_all_jstr" }
 ]
 
 omni_update = [
-    {task = "run_pipeline", pipeline = "download_all_resources"},
-    {task = "run_pipeline", pipeline = "extract_all" },
-    {task = "run_pipeline", pipeline = "merge_all" },
-    {task = "run_pipeline", pipeline = "port_all" },
-    {task = "run_pipeline", pipeline = "back_port_all" },
-    {task = "run_pipeline", pipeline = "prune_all" }
+    {task = "run_pipeline", pipeline = "download_default"},
+    {task = "run_pipeline", pipeline = "download_soartex"},
+    {task = "run_pipeline", pipeline = "download_jstr"},
+    {task = "run_pipeline", pipeline = "extract_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_soartex"},
+    {task = "run_pipeline", pipeline = "merge_all_jstr"},
+    {task = "run_pipeline", pipeline = "port_all_fanver" },
+    {task = "run_pipeline", pipeline = "back_port_all_fanver" },
+    {task = "run_pipeline", pipeline = "port_all_jstr"},
+    {task = "run_pipeline", pipeline = "back_port_all_jstr"},
+
+    {task = "run_pipeline", pipeline = "prune_all_fanver"},
+    {task = "run_pipeline", pipeline = "prune_all_jstr"}
 ]
 
 "1.7_merge_fanver" = [
@@ -99,7 +182,7 @@ omni_update = [
     {task = "merge_patches", resource = "default-modded-1.7.x"}
 ]
 
-"1.7_dev" = [
+"1.7_dev_soartex" = [
 #    {task = "extract_default", resource = "default-modded-1.7.x"},
 
     # build merged resource packs from the patch directories
@@ -117,7 +200,7 @@ omni_update = [
     {task = "watch_changes", resources = ["fanver-modded-1.7.x", "invictus-modded-1.7.x"]}
 ]
 
-"1.12_dev" = [
+"1.12_dev_soartex" = [
 #    {task = "extract_default", resource = "default-modded-1.12.x"},
 
     # build merged resource packs from the patch directories
@@ -134,17 +217,31 @@ omni_update = [
     {task = "watch_changes", resources = ["fanver-modded-base", "fanver-modded-1.12.x"]}
 ]
 
+"1.12_dev_jstr" = [
+#    {task = "extract_default", resource = "default-modded-1.12.x"},
+
+    # build merged resource packs from the patch directories
+    {task = "merge_patches", resource = "jstr-modded-1.12.x"},
+
+    # link all texture packs with relevant game instances
+    {task = "link_resources", resource = "jstr-vanilla-1.12.x"},
+    {task = "link_resources", resource = "jstr-modded-1.12.x"},
+
+    # watch for changes/update merged packs in any of the specified resources
+    {task = "watch_changes", resources = ["jstr-modded-1.12.x"]}
+]
+
 "1.12_extract" = [
     {task = "extract_default", resource = "default-modded-1.12.x"},
     {task = "merge_patches", resource = "default-modded-1.12.x"}
 ]
 
-"1.7_prune" = [
+"1.7_prune_fanver" = [
 #    {task = "run_pipeline", pipeline = "1.12_extract"},
-    {task = "prune_files", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/soartex/fanver/Pruned-1.7.x", action = "none"}
+    {task = "prune_files", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x", action = "none"}
 ]
 
-"1.12_prune" = [
+"1.12_prune_fanver" = [
 #    {task = "run_pipeline", pipeline = "1.12_extract"},
     {task = "prune_files", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", action = "none"}
 ]
@@ -152,19 +249,27 @@ omni_update = [
 [["download_1k_mods"]]
 # up to 1000 mods for each of the five minor versions of minecraft
 task = "download_mods"
-database_path = "~/soartex/manager/manager.db"
+database_path = "~/graphics/manager/manager.db"
 mod_limit = 1000
 ["download_1k_mods".mods_dirs]
-5 = "~/soartex/default/Downloaded-Mods-1.5.x/"
-7 = "~/soartex/default/Downloaded-Mods-1.7.x/"
-10 = "~/soartex/default/Downloaded-Mods-1.10.x/"
-12 = "~/soartex/default/Downloaded-Mods-1.12.x/"
-15 = "~/soartex/default/Downloaded-Mods-1.15.x/"
+5 = "~/graphics/default/Downloaded-Mods-1.5.x/"
+7 = "~/graphics/default/Downloaded-Mods-1.7.x/"
+10 = "~/graphics/default/Downloaded-Mods-1.10.x/"
+12 = "~/graphics/default/Downloaded-Mods-1.12.x/"
+15 = "~/graphics/default/Downloaded-Mods-1.15.x/"
 
 
 # INTERNAL VERSION PORTS
-# for textures with duplicates
-[["1.5_to_1.5_port"]]
+# for reused vanilla textures
+[["1.5_to_1.5_port_fanver"]]
+task = "port_patches"
+default_prior = "default-vanilla-1.5.x"
+default_post = "default-modded-1.5.x"
+resource_prior = "fanver-vanilla-1.5.x"
+resource_post = "fanver-modded-1.5.x"
+action = "copy"
+# for modded textures with duplicates
+[["1.5_to_1.5_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.5.x"
 default_post = "default-modded-1.5.x"
@@ -172,7 +277,14 @@ resource_prior = "fanver-modded-1.5.x"
 resource_post = "fanver-modded-1.5.x"
 action = "copy"
 
-[["1.7_to_1.7_port"]]
+[["1.7_to_1.7_port_fanver"]]
+task = "port_patches"
+default_prior = "default-vanilla-1.7.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "fanver-vanilla-1.7.x"
+resource_post = "fanver-modded-1.7.x"
+action = "copy"
+[["1.7_to_1.7_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.7.x"
 default_post = "default-modded-1.7.x"
@@ -180,7 +292,14 @@ resource_prior = "fanver-modded-1.7.x"
 resource_post = "fanver-modded-1.7.x"
 action = "copy"
 
-[["1.10_to_1.10_port"]]
+[["1.10_to_1.10_port_fanver"]]
+task = "port_patches"
+default_prior = "default-vanilla-1.10.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "fanver-vanilla-1.10.x"
+resource_post = "fanver-modded-1.10.x"
+action = "copy"
+[["1.10_to_1.10_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.10.x"
 default_post = "default-modded-1.10.x"
@@ -188,7 +307,14 @@ resource_prior = "fanver-modded-1.10.x"
 resource_post = "fanver-modded-1.10.x"
 action = "copy"
 
-[["1.12_to_1.12_port"]]
+[["1.12_to_1.12_port_fanver"]]
+task = "port_patches"
+default_prior = "default-vanilla-1.12.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "fanver-vanilla-1.12.x"
+resource_post = "fanver-modded-1.12.x"
+action = "copy"
+[["1.12_to_1.12_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.12.x"
 default_post = "default-modded-1.12.x"
@@ -198,7 +324,7 @@ action = "copy"
 
 
 # CROSS VERSION PORTS
-[["1.5_to_1.7_port"]]
+[["1.5_to_1.7_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.5.x"
 default_post = "default-modded-1.7.x"
@@ -206,7 +332,7 @@ resource_prior = "fanver-modded-1.5.x"
 resource_post = "fanver-modded-1.7.x"
 action = "copy"
 
-[["1.7_to_1.10_port"]]
+[["1.7_to_1.10_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.7.x"
 default_post = "default-modded-1.10.x"
@@ -214,7 +340,7 @@ resource_prior = "fanver-modded-1.7.x"
 resource_post = "fanver-modded-1.10.x"
 action = "copy"
 
-[["1.7_to_1.12_port"]]
+[["1.7_to_1.12_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.7.x"
 default_post = "default-modded-1.12.x"
@@ -222,7 +348,7 @@ resource_prior = "fanver-modded-1.7.x"
 resource_post = "fanver-modded-1.12.x"
 action = "copy"
 
-[["1.10_to_1.12_port"]]
+[["1.10_to_1.12_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.10.x"
 default_post = "default-modded-1.12.x"
@@ -230,7 +356,7 @@ resource_prior = "fanver-modded-1.10.x"
 resource_post = "fanver-modded-1.12.x"
 action = "copy"
 
-[["1.12_to_1.15_port"]]
+[["1.12_to_1.15_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.12.x"
 default_post = "default-modded-1.15.x"
@@ -240,7 +366,7 @@ action = "copy"
 
 
 # CROSS VERSION BACK PORTS
-[["1.12_to_1.10_port"]]
+[["1.12_to_1.10_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.12.x"
 default_post = "default-modded-1.10.x"
@@ -248,15 +374,15 @@ resource_prior = "fanver-modded-1.12.x"
 resource_post = "fanver-modded-1.10.x"
 action = "copy"
 
-[["1.10_to_1.7_port"]]
+[["1.10_to_1.7_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.10.x"
 default_post = "default-modded-1.7.x"
 resource_prior = "fanver-modded-1.10.x"
-resource_post = "fanver-modded-1.1.x"
+resource_post = "fanver-modded-1.7.x"
 action = "copy"
 
-[["1.12_to_1.7_port"]]
+[["1.12_to_1.7_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.12.x"
 default_post = "default-modded-1.7.x"
@@ -264,10 +390,144 @@ resource_prior = "fanver-modded-1.12.x"
 resource_post = "fanver-modded-1.7.x"
 action = "copy"
 
-[["1.7_to_1.5_port"]]
+[["1.7_to_1.5_port_fanver"]]
 task = "port_patches"
 default_prior = "default-modded-1.7.x"
 default_post = "default-modded-1.5.x"
 resource_prior = "fanver-modded-1.7.x"
 resource_post = "fanver-modded-1.5.x"
+action = "copy"
+
+
+
+
+# INTERNAL VERSION PORTS
+# for modded textures with duplicates
+[["1.5_to_1.5_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.5.x"
+default_post = "default-modded-1.5.x"
+resource_prior = "jstr-modded-1.5.x"
+resource_post = "jstr-modded-1.5.x"
+action = "copy"
+
+[["1.7_to_1.7_port_jstr"]]
+task = "port_patches"
+default_prior = "default-vanilla-1.7.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "jstr-vanilla-1.7.x"
+resource_post = "jstr-modded-1.7.x"
+action = "copy"
+[["1.7_to_1.7_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "jstr-modded-1.7.x"
+resource_post = "jstr-modded-1.7.x"
+action = "copy"
+
+[["1.10_to_1.10_port_jstr"]]
+task = "port_patches"
+default_prior = "default-vanilla-1.10.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "jstr-vanilla-1.10.x"
+resource_post = "jstr-modded-1.10.x"
+action = "copy"
+[["1.10_to_1.10_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.10.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "jstr-modded-1.10.x"
+resource_post = "jstr-modded-1.10.x"
+action = "copy"
+
+[["1.12_to_1.12_port_jstr"]]
+task = "port_patches"
+default_prior = "default-vanilla-1.12.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "jstr-vanilla-1.12.x"
+resource_post = "jstr-modded-1.12.x"
+action = "copy"
+[["1.12_to_1.12_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "jstr-modded-1.12.x"
+resource_post = "jstr-modded-1.12.x"
+action = "copy"
+
+
+# CROSS VERSION PORTS
+[["1.5_to_1.7_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.5.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "jstr-modded-1.5.x"
+resource_post = "jstr-modded-1.7.x"
+action = "copy"
+
+[["1.7_to_1.10_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "jstr-modded-1.7.x"
+resource_post = "jstr-modded-1.10.x"
+action = "copy"
+
+[["1.7_to_1.12_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "jstr-modded-1.7.x"
+resource_post = "jstr-modded-1.12.x"
+action = "copy"
+
+[["1.10_to_1.12_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.10.x"
+default_post = "default-modded-1.12.x"
+resource_prior = "jstr-modded-1.10.x"
+resource_post = "jstr-modded-1.12.x"
+action = "copy"
+
+[["1.12_to_1.15_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.15.x"
+resource_prior = "jstr-modded-1.12.x"
+resource_post = "jstr-modded-1.15.x"
+action = "copy"
+
+
+# CROSS VERSION BACK PORTS
+[["1.12_to_1.10_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.10.x"
+resource_prior = "jstr-modded-1.12.x"
+resource_post = "jstr-modded-1.10.x"
+action = "copy"
+
+[["1.10_to_1.7_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.10.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "jstr-modded-1.10.x"
+resource_post = "jstr-modded-1.7.x"
+action = "copy"
+
+[["1.12_to_1.7_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.12.x"
+default_post = "default-modded-1.7.x"
+resource_prior = "jstr-modded-1.12.x"
+resource_post = "jstr-modded-1.7.x"
+action = "copy"
+
+[["1.7_to_1.5_port_jstr"]]
+task = "port_patches"
+default_prior = "default-modded-1.7.x"
+default_post = "default-modded-1.5.x"
+resource_prior = "jstr-modded-1.7.x"
+resource_post = "jstr-modded-1.5.x"
 action = "copy"

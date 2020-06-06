@@ -40,7 +40,7 @@ def download_mods(mods_dirs, database_path, mod_limit=100):
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
     }
 
-    page_size = 20
+    page_size = 50
     mod_count = 0
 
     # download sets of mod information at a time
@@ -133,7 +133,7 @@ def download_mods(mods_dirs, database_path, mod_limit=100):
                                    vanilla_minor_version=minor_version)
                 else:
                     engine.execute(mod_files.update()
-                                   .where(mod_id=mod_meta['id'], vanilla_minor_version=minor_version)
+                                   .where((mod_files.c.mod_id == mod_meta['id']) & (mod_files.c.vanilla_minor_version == minor_version))
                                    .values(file_name=available_file_name))
 
     for minor_version in patch_info:

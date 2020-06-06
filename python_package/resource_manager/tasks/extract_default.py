@@ -4,6 +4,7 @@ import tempfile
 import zipfile
 import shutil
 import re
+from distutils.dir_util import copy_tree
 
 
 def extract_default(mods_dirs, output_dir):
@@ -107,9 +108,13 @@ def extract_default(mods_dirs, output_dir):
 
                 # copy mod patches into output dir
                 patch_dir = os.path.join(output_dir, patch_dir_name)
-                if os.path.exists(patch_dir):
-                    shutil.rmtree(patch_dir)
-                shutil.copytree(temp_dir, patch_dir)
+
+                # if os.path.exists(patch_dir):
+                #     shutil.rmtree(patch_dir)
+                # shutil.copytree(temp_dir, patch_dir)
+
+                # intentionally merge default textures from multiple mod versions together
+                copy_tree(temp_dir, patch_dir)
 
                 # create a mod.json
                 patch_info_path = os.path.join(patch_dir, 'mod.json')

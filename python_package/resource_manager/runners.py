@@ -23,7 +23,7 @@ def run_pipeline(config, resources, pipelines):
 
     if config['pipeline'] not in pipelines:
         # if any individual task is passed to the run_pipeline task, direct it to the proper task
-        if config['task'] in task_runners:
+        if 'task' in config and config['task'] in task_runners:
             task_runners[config['task']](config, resources, pipelines)
         else:
             raise ValueError(f"Pipeline not recognized: {config['pipeline']}")

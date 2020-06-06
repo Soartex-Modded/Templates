@@ -27,7 +27,7 @@ def prune_files(patches_dir, default_pack_dir, pruned_dir, action=None):
     :param patches_dir: directory of mod patches
     :param default_pack_dir: directory of a default texture pack
     :param pruned_dir: directory to move dead files
-    :param action: one of [None, 'remove']
+    :param action: one of [None, 'move']
     """
 
     patches_dir = os.path.expanduser(patches_dir)
@@ -78,5 +78,5 @@ def prune_files(patches_dir, default_pack_dir, pruned_dir, action=None):
         if not dir_names and not file_names:
             print(f"dead folder: {file_dir}")
 
-            if action == 'remove':
+            if action == 'move':
                 os.rmdir(file_dir)
