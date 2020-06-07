@@ -27,7 +27,7 @@ def prune_files(patches_dir, default_pack_dir, pruned_dir, action=None):
     :param patches_dir: directory of mod patches
     :param default_pack_dir: directory of a default texture pack
     :param pruned_dir: directory to move dead files
-    :param action: one of [None, 'move']
+    :param action: one of [None, '~unused', 'prune']
     """
 
     patches_dir = os.path.expanduser(patches_dir)
@@ -51,24 +51,34 @@ def prune_files(patches_dir, default_pack_dir, pruned_dir, action=None):
 
                 if os.path.exists(default_file_path):
                     continue
-
                 if default_file_path.endswith('mod.json'):
                     continue
-
-                if '~Alt' in default_file_path:
+                if '~alt' in default_file_path.lower():
+                    continue
+                if '~unused' in default_file_path.lower():
                     continue
                 if default_file_path.lower().endswith('~untextured.txt'):
                     continue
-
+                if default_file_path.endswith(".ctx"):
+                    if os.path.exists(default_file_path.replace('.ctx', '.png')):
+                        continue
+                if default_file_path.endswith(".mcmeta"):
+                    if os.path.exists(default_file_path.replace('.mcmeta', '')):
+                        continue
                 if patch_file_path.endswith(".DS_Store"):
                     os.remove(patch_file_path)
                     continue
 
                 print(f"dead file: {relative_path}")
 
-                if action == 'move':
+                if action == '~unused':
+                    patch_dir, patch_filename = os.path.split(patch_file_path)
+                    replace_path = os.path.join(patch_dir, '~unused', patch_filename)
+                    os.makedirs(os.path.dirname(replace_path), exist_ok=True)
+                    shutil.move(patch_file_path, replace_path)
+                if action == 'prune':
                     replace_path = os.path.join(pruned_dir, *relative_path.split(os.sep))
-                    os.makedirs(os.path.dirname(replace_path))
+                    os.makedirs(os.path.dirname(replace_path), exist_ok=True)
                     shutil.move(patch_file_path, replace_path)
 
     for file_dir, dir_names, file_names in os.walk(patches_dir, topdown=False):

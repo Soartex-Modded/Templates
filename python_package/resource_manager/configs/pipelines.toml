@@ -119,17 +119,17 @@ back_port_all_jstr = [
 ]
 
 prune_all_fanver = [
-    {task = "prune_files", action = "move", resource = "fanver-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/fanver/Pruned-1.5.x"},
-    {task = "prune_files", action = "move", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x"},
-    {task = "prune_files", action = "move", resource = "fanver-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/fanver/Pruned-1.10.x"},
-    {task = "prune_files", action = "move", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/fanver/Pruned-1.12.x"},
+    {task = "prune_files", action = "prune", resource = "fanver-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/fanver/Pruned-1.5.x"},
+    {task = "prune_files", action = "prune", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x"},
+    {task = "prune_files", action = "prune", resource = "fanver-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/fanver/Pruned-1.10.x"},
+    {task = "prune_files", action = "prune", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/fanver/Pruned-1.12.x"},
 ]
 
 prune_all_jstr = [
-    {task = "prune_files", action = "move", resource = "jstr-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/jstr/Pruned-1.5.x"},
-    {task = "prune_files", action = "move", resource = "jstr-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/jstr/Pruned-1.7.x"},
-    {task = "prune_files", action = "move", resource = "jstr-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/jstr/Pruned-1.10.x"},
-    {task = "prune_files", action = "move", resource = "jstr-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/jstr/Pruned-1.12.x"},
+    {task = "prune_files", action = "prune", resource = "jstr-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/jstr/Pruned-1.5.x"},
+    {task = "prune_files", action = "prune", resource = "jstr-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/jstr/Pruned-1.7.x"},
+    {task = "prune_files", action = "prune", resource = "jstr-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/jstr/Pruned-1.10.x"},
+    {task = "prune_files", action = "prune", resource = "jstr-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/jstr/Pruned-1.12.x"},
 ]
 
 omni_update_soartex = [
@@ -155,20 +155,20 @@ omni_update_jstr = [
 ]
 
 omni_update = [
-    {task = "run_pipeline", pipeline = "download_default"},
-    {task = "run_pipeline", pipeline = "download_soartex"},
-    {task = "run_pipeline", pipeline = "download_jstr"},
-    {task = "run_pipeline", pipeline = "extract_all_default"},
-    {task = "run_pipeline", pipeline = "merge_all_default"},
-    {task = "run_pipeline", pipeline = "merge_all_soartex"},
-    {task = "run_pipeline", pipeline = "merge_all_jstr"},
-    {task = "run_pipeline", pipeline = "port_all_fanver" },
-    {task = "run_pipeline", pipeline = "back_port_all_fanver" },
+#    {task = "run_pipeline", pipeline = "download_default"},
+#    {task = "run_pipeline", pipeline = "download_soartex"},
+#    {task = "run_pipeline", pipeline = "download_jstr"},
+#    {task = "run_pipeline", pipeline = "extract_all_default"},
+#    {task = "run_pipeline", pipeline = "merge_all_default"},
+#    {task = "run_pipeline", pipeline = "merge_all_soartex"},
+#    {task = "run_pipeline", pipeline = "merge_all_jstr"},
+    {task = "run_pipeline", pipeline = "port_all_fanver"},
+    {task = "run_pipeline", pipeline = "back_port_all_fanver"},
     {task = "run_pipeline", pipeline = "port_all_jstr"},
     {task = "run_pipeline", pipeline = "back_port_all_jstr"},
 
-    {task = "run_pipeline", pipeline = "prune_all_fanver"},
-    {task = "run_pipeline", pipeline = "prune_all_jstr"}
+#    {task = "run_pipeline", pipeline = "prune_all_fanver"},
+#    {task = "run_pipeline", pipeline = "prune_all_jstr"}
 ]
 
 "1.7_merge_fanver" = [
