@@ -16,8 +16,8 @@ The tool does many things-
 - It ports the respective resource pack images based on the detected mappings. These ports are applied within minecraft versions (1.7.x to 1.7.x, for when mods update their paths), to newer minecraft versions (porting from 1.7.x to 1.10.x, or 1.12.x to 1.15.x), and back (1.12.x contributions may be automatically ported back to 1.10.x).
 - It updates or creates resource-pack mod.json files with information pulled from CurseForge and extracted mcmod.info files
 - It ports any .mcmeta files accompanying ported .png files
-- It prunes files in the patches covered by the default resource pack, that are not present in the default resource pack (where the default resource pack includes any file in the latest mod version pulled from Curseforge, or any of the linked modpacks). Pruned files are moved to a new root folder "~unused".
-- pruning ignores ~alts and ~unused folders and ~untextured.txt files, case insensitive. It also ignores .ctx and .mcmeta files that have accompanying .png files.
+- It has the capability of pruning files in the patches covered by the default resource pack, that are not present in the default resource pack (where the default resource pack includes any file in the latest mod version pulled from Curseforge, or any of the linked modpacks). Pruned files are moved to a new root folder "~unused".
+- Pruning is not enabled in these PRs. Pruning ignores ~alts and ~unused folders and ~untextured.txt files, case insensitive. It also ignores .ctx and .mcmeta files that have accompanying .png files.
 
 
 In this PR, the default packs were constructed from the top 1000 mods for each minecraft version from CurseForge, as well as the mods folders from the following modpacks. Linking with modpacks protects and ports to/from the textures present in the older versions of mods used in these packs.
@@ -45,3 +45,10 @@ The patch name that the texture originally came from is not used. This is too bu
 Textures are not ported if they are empty and existing textures are not overwritten.
 
 I have been tuning the tooling to improve the quality of ports based on my logging output, but I don't have the time to do deep testing for everything this script affects. Feel free to push changes to the `auto_port` branches to fix individual bugs.
+
+Linked PRs:
+- https://github.com/John-Smith-Modded/JSTR-Modded-1.15.x_PULL_REQUEST/pull/1
+- https://github.com/John-Smith-Modded/JSTR-Modded-1.12.x/pull/55
+- https://github.com/John-Smith-Modded/JSTR-Modded-1.10.x/pull/16
+- https://github.com/John-Smith-Modded/JSTR-Modded-1.7.x/pull/191
+- https://github.com/John-Smith-Modded/JSTR-Modded-1.5.x/pull/1

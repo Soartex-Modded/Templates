@@ -144,10 +144,10 @@ omni_update_soartex = [
 ]
 
 omni_update_jstr = [
-#    {task = "run_pipeline", pipeline = "download_default"},
+    {task = "run_pipeline", pipeline = "download_default"},
     {task = "run_pipeline", pipeline = "download_jstr"},
-#    {task = "run_pipeline", pipeline = "extract_all_default"},
-#    {task = "run_pipeline", pipeline = "merge_all_default"},
+    {task = "run_pipeline", pipeline = "extract_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_default"},
     {task = "run_pipeline", pipeline = "merge_all_jstr"},
     {task = "run_pipeline", pipeline = "port_all_jstr" },
     {task = "run_pipeline", pipeline = "back_port_all_jstr" },
@@ -155,13 +155,13 @@ omni_update_jstr = [
 ]
 
 omni_update = [
-#    {task = "run_pipeline", pipeline = "download_default"},
-#    {task = "run_pipeline", pipeline = "download_soartex"},
-#    {task = "run_pipeline", pipeline = "download_jstr"},
-#    {task = "run_pipeline", pipeline = "extract_all_default"},
-#    {task = "run_pipeline", pipeline = "merge_all_default"},
-#    {task = "run_pipeline", pipeline = "merge_all_soartex"},
-#    {task = "run_pipeline", pipeline = "merge_all_jstr"},
+    {task = "run_pipeline", pipeline = "download_default"},
+    {task = "run_pipeline", pipeline = "download_soartex"},
+    {task = "run_pipeline", pipeline = "download_jstr"},
+    {task = "run_pipeline", pipeline = "extract_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_default"},
+    {task = "run_pipeline", pipeline = "merge_all_soartex"},
+    {task = "run_pipeline", pipeline = "merge_all_jstr"},
     {task = "run_pipeline", pipeline = "port_all_fanver"},
     {task = "run_pipeline", pipeline = "back_port_all_fanver"},
     {task = "run_pipeline", pipeline = "port_all_jstr"},
