@@ -192,7 +192,7 @@ resources = [
     "fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x",
     "fanver-vanilla-1.5.x", "fanver-vanilla-1.7.x", "fanver-vanilla-1.10.x", "fanver-vanilla-1.12.x",
     "invictus-vanilla-1.7.x", "invictus-vanilla-1.12.x",
-    "fanver-modded-base", "gtnh-1.7.x", "invictus-modded-1.7.x"
+    "fanver-modded-base", "gtnh-1.7.x", "invictus-modded-1.7.x", "modded-server-data"
 ]
 
 # sequentially run the "download resource" task for all of the listed resources
@@ -235,6 +235,18 @@ apply_task = "run_subprocess"
 resources = ["fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]
 cmd = "git add . && git reset --hard"
 folder = "patches_dir"
+
+[[fanver_fix_mod_jsons]]
+task = "run_apply"
+apply_task = "fix_mod_jsons"
+resources = ["fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]
+#[[fanver_fix_mod_jsons]]
+#task = "run_apply"
+#apply_task = "run_subprocess"
+#resources = ["fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]
+##cmd = "git add . && git reset --hard && git pull"
+##cmd = "git add . && git commit -m \"Fix mod.jsons and patch names\" && git push"
+#folder = "patches_dir"
 
 # print paths to files that are overwritten by patches multiple times
 [[detect_overwrites_fanver]]

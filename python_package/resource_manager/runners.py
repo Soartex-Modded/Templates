@@ -22,7 +22,8 @@ def run_pipeline(config, resources, pipelines):
         'run_pipeline': run_pipeline,
         'run_parallel': run_parallel,
         'run_apply': run_apply,
-        'run_subprocess': run_run_subprocess
+        'run_subprocess': run_run_subprocess,
+        'fix_mod_jsons': run_fix_mod_jsons
     }
 
     if config['pipeline'] not in pipelines:
@@ -50,9 +51,10 @@ def run_apply(config, resources, pipelines):
     print("Applying task to multiple resources.")
 
     # construct a new pipeline
-    resource_names = config['resources']
-    del config['resources']
-    pipeline = [{**config, 'resource': resource_name, 'task': config['apply_task']} for resource_name in resource_names]
+    resource_names = config.pop('resources')
+    apply_task = config.pop('apply_task')
+
+    pipeline = [{**config, 'resource': resource_name, 'task': apply_task} for resource_name in resource_names]
 
     # register pipeline
     pipeline_name = json.dumps(pipeline, indent=4)
@@ -168,3 +170,8 @@ def run_run_subprocess(config, resources, pipelines):
     print("cmd:", config['cmd'])
     print("pwd:", config['folder'])
     tasks.run_subprocess(cmd=config['cmd'], cwd=resources[config['resource']][config['folder']])
+
+
+def run_fix_mod_jsons(config, resources, pipelines):
+    print("Fixing mod.jsons in", config['resource'])
+    tasks.fix_mod_jsons(patches_dir=resources[config['resource']]['patches_dir'])

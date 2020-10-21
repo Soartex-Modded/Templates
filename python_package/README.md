@@ -40,6 +40,11 @@ Uses the CurseForge api to download the top k most downloaded mods for each spec
 Clones or downloads the necessary assets from a git repository or CurseForge.
 The default resources.toml contains all the necessary info for automatically collecting all of the resources.
 
+### Detect Overwrites
+Logs files that are present in multiple patches.
+
+### Fix mod.json
+Logs inconsistencies and enforces proper formatting in mod.json files.
 
 ## Installation
 1. python 3.6 or greater

@@ -211,6 +211,9 @@ link_dirs = [
     "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/resourcepacks/GTNH_Overrides"
 ]
 
+["modded-server-data"]
+download_repo = "git@github.com:Soartex-Modded/Modded-Server-Data.git"
+download_dir = "~/graphics/fanver/Modded-Server-Data/"
 
 
 # JSTR RESOURCES
