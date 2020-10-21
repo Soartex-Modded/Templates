@@ -46,8 +46,8 @@ def prune_files(patches_dir, default_pack_dir, pruned_dir, action=None):
         for file_dir, _, file_names in os.walk(patch_dir):
             for file_name in file_names:
                 patch_file_path = os.path.join(file_dir, file_name)
-                relative_path = patch_file_path.replace(patch_dir, "")
-                default_file_path = os.path.join(default_pack_dir, *relative_path.split(os.sep))
+                relative_path = [i for i in patch_file_path.replace(patch_dir, "").split(os.sep) if i]
+                default_file_path = os.path.join(default_pack_dir, *relative_path)
 
                 if os.path.exists(default_file_path):
                     continue
@@ -65,19 +65,22 @@ def prune_files(patches_dir, default_pack_dir, pruned_dir, action=None):
                 if default_file_path.endswith(".mcmeta"):
                     if os.path.exists(default_file_path.replace('.mcmeta', '')):
                         continue
+                if default_file_path.endswith(".txt"):
+                    if os.path.exists(default_file_path.replace('.txt', '.png')):
+                        continue
                 if patch_file_path.endswith(".DS_Store"):
                     os.remove(patch_file_path)
                     continue
 
-                print(f"dead file: {relative_path}")
+                print(f"dead file: {os.sep.join(relative_path)}")
 
                 if action == '~unused':
-                    patch_dir, patch_filename = os.path.split(patch_file_path)
-                    replace_path = os.path.join(patch_dir, '~unused', patch_filename)
+                    patch_file_dir, patch_filename = os.path.split(patch_file_path)
+                    replace_path = os.path.join(patch_file_dir, '~unused', patch_filename)
                     os.makedirs(os.path.dirname(replace_path), exist_ok=True)
                     shutil.move(patch_file_path, replace_path)
                 if action == 'prune':
-                    replace_path = os.path.join(pruned_dir, *relative_path.split(os.sep))
+                    replace_path = os.path.join(pruned_dir, *relative_path)
                     os.makedirs(os.path.dirname(replace_path), exist_ok=True)
                     shutil.move(patch_file_path, replace_path)
 

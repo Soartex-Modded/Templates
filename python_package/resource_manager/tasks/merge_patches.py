@@ -4,9 +4,19 @@ from distutils.dir_util import copy_tree
 import json
 
 
-def merge_patches(patches_dir, pack_dir, pack_format):
+def set_deep(obj, path, value):
+    for key in path[:-1]:
+        obj = obj.setdefault(key, {})
+    obj[path[-1]] = value
+
+
+def merge_patches(patches_dir, pack_dir, pack_format, enable_patch_map):
     """
     delete and (re)make the resource pack of merged patches
+    :param patches_dir: location of patches
+    :param pack_dir: location to output merged patches
+    :param pack_format: necessary metadata to build pack.json
+    :param enable_patch_map: create a patch_map.json file with the source patch of each texture
     """
     patches_dir = os.path.expanduser(patches_dir)
     pack_dir = os.path.expanduser(pack_dir)
@@ -17,14 +27,23 @@ def merge_patches(patches_dir, pack_dir, pack_format):
     os.makedirs(pack_dir, exist_ok=True)
     os.makedirs(patches_dir, exist_ok=True)
 
+    patch_map = {}
+
     # copy all mods into resource pack
-    for mod_name in os.listdir(patches_dir):
-        if mod_name == '.git':
+    for patch_name in os.listdir(patches_dir):
+        patch_dir = os.path.join(patches_dir, patch_name)
+
+        if patch_name == '.git' or not os.path.isdir(patch_dir):
             continue
 
-        mod_dir = os.path.join(patches_dir, mod_name)
-        if os.path.isdir(mod_dir):
-            copy_tree(mod_dir, pack_dir)
+        copy_tree(patch_dir, pack_dir)
+
+        if enable_patch_map:
+            for file_dir, _, file_names in os.walk(patch_dir):
+                relative_dir = [i for i in file_dir.replace(patch_dir, "").split(os.sep) if i]
+                for file_name in file_names:
+                    if file_name.endswith(".png"):
+                        set_deep(patch_map, [*relative_dir, file_name], patch_name)
 
     # delete the remaining mod.json
     mod_mcmeta = os.path.join(pack_dir, "mod.json")
@@ -43,3 +62,8 @@ def merge_patches(patches_dir, pack_dir, pack_format):
                 "description": f"Merged patches from {os.path.basename(os.path.normpath(patches_dir))}"
             }
         }, pack_mcmeta_file, indent=4)
+
+    if enable_patch_map:
+        patch_map_path = os.path.join(pack_dir, "patch_map.json")
+        with open(patch_map_path, 'w') as patch_map_file:
+            json.dump(patch_map, patch_map_file, indent=4)

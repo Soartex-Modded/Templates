@@ -7,7 +7,7 @@ import json
 
 
 def run_pipeline(config, resources, pipelines):
-    print(f"Running pipeline: {config['pipeline']}.")
+    print("Running pipeline:", config['pipeline'])
     task_runners = {
         'extract_default': run_extract_default,
         'merge_patches': run_merge_patches,
@@ -15,10 +15,13 @@ def run_pipeline(config, resources, pipelines):
         'watch_changes': run_watch_changes,
         'port_patches': run_port_patches,
         'prune_files': run_prune_files,
+        'detect_overwrites': run_detect_overwrites,
+        'remove_resource': run_remove_resource,
         'download_mods': run_download_mods,
         'download_resource': run_download_resource,
         'run_pipeline': run_pipeline,
-        'run_parallel': run_parallel
+        'run_parallel': run_parallel,
+        'run_subprocess': run_run_subprocess
     }
 
     if config['pipeline'] not in pipelines:
@@ -35,7 +38,7 @@ def run_pipeline(config, resources, pipelines):
 
 def run_parallel(config, resources, pipelines):
     # This task probably doesn't have great benefits, as most of these tasks are bound by disk transfer
-    print(f"Running in parallel: {config['pipeline']}.")
+    print("Running in parallel:", config['pipeline'])
     if config['pipeline'] not in pipelines:
         raise ValueError(f"Pipeline not recognized: {config['pipeline']}")
 
@@ -62,10 +65,14 @@ def run_unlink_resource(config, resources, pipelines):
 
 def run_merge_patches(config, resources, pipelines):
     resource = resources[config['resource']]
-    print(f"Resource: {json.dumps(resource, indent=4)}")
+    print("Resource:", json.dumps(resource, indent=4))
     print("Merging patches.")
     start_time = time.time()
-    tasks.merge_patches(resource['patches_dir'], resource['pack_dir'], resource['pack_format'])
+    tasks.merge_patches(
+        patches_dir=resource['patches_dir'],
+        pack_dir=resource['pack_dir'],
+        pack_format=resource['pack_format'],
+        enable_patch_map=True)
     elapsed_time = time.time() - start_time
     print(f"Patches merged in {round(elapsed_time)} seconds.")
 
@@ -77,13 +84,14 @@ def run_watch_changes(config, resources, pipelines):
 
 
 def run_port_patches(config, resources, pipelines):
-    print(f"Porting {config}.")
+    print("Porting", config)
     tasks.port_patches(
         default_prior_dir=resources[config['default_prior']]['pack_dir'],
         default_post_dir=resources[config['default_post']]['pack_dir'],
         resource_prior_patches_dir=resources[config['resource_prior']]['patches_dir'],
         resource_post_patches_dir=resources[config['resource_post']]['patches_dir'],
         resource_post_dir=resources[config['resource_post']]['pack_dir'],
+        resource_prior_dir=resources[config['resource_prior']]['pack_dir'],
         default_post_patches_dir=resources[config['default_post']]['patches_dir'],
         action=config.get('action')
     )
@@ -97,6 +105,11 @@ def run_prune_files(config, resources, pipelines):
         pruned_dir=config['pruned_dir'],
         action=config.get('action')
     )
+
+
+def run_detect_overwrites(config, resources, pipelines):
+    print("Detecting overwritten files.")
+    tasks.detect_overwrites(patches_dir=resources[config['resource']]['patches_dir'])
 
 
 def run_download_mods(config, resources, pipelines):
@@ -116,7 +129,7 @@ def run_download_resource(config, resources, pipelines):
 
 
 def run_remove_resource(config, resources, pipelines):
-    print(f"Removing {config['folder']}")
+    print("Removing", config['folder'])
 
     folder_dirs = resources[config['resource']][config['folder']]
 
@@ -131,3 +144,10 @@ def run_remove_resource(config, resources, pipelines):
         folder_dir = os.path.expanduser(folder_dir)
         if os.path.exists(folder_dir):
             shutil.rmtree(os.path.dirname(folder_dir))
+
+
+def run_run_subprocess(config, resources, pipelines):
+    print("Running subprocess.")
+    print("cmd:", config['cmd'])
+    print("pwd:", config['folder'])
+    tasks.run_subprocess(cmd=config['cmd'], cwd=resources[config['resource']][config['folder']])

@@ -1,5 +1,6 @@
+import subprocess
+import sys
 import os
-import shutil
 
 
 def link_resource(link_dirs, output_dir):
@@ -21,3 +22,12 @@ def unlink_resource(link_dirs):
         from_dir = os.path.expanduser(from_dir)
         if os.path.exists(from_dir):
             os.unlink(from_dir)
+
+
+def run_subprocess(cmd, cwd):
+    """
+    Execute cmd at cwd
+    :param cwd: directory to execute command at
+    :param cmd: plaintext command
+    """
+    subprocess.check_call(cmd, shell=True, cwd=os.path.expanduser(cwd), stdout=sys.stdout, stderr=subprocess.STDOUT)

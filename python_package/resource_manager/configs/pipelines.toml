@@ -119,10 +119,25 @@ back_port_all_jstr = [
 ]
 
 prune_all_fanver = [
-    {task = "prune_files", action = "prune", resource = "fanver-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/fanver/Pruned-1.5.x"},
-    {task = "prune_files", action = "prune", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x"},
-    {task = "prune_files", action = "prune", resource = "fanver-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/fanver/Pruned-1.10.x"},
-    {task = "prune_files", action = "prune", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/fanver/Pruned-1.12.x"},
+    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/fanver/Pruned-1.5.x"},
+    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x"},
+    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/fanver/Pruned-1.10.x"},
+    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/fanver/Pruned-1.12.x"},
+]
+
+detect_overwrites_fanver = [
+    {task = "detect_overwrites", resource = "fanver-modded-1.5.x"},
+    {task = "detect_overwrites", resource = "fanver-modded-1.7.x"},
+    {task = "detect_overwrites", resource = "fanver-modded-1.10.x"},
+    {task = "detect_overwrites", resource = "fanver-modded-1.12.x"},
+]
+
+reset_fanver = [
+    {task = "run_subprocess", resource = "fanver-modded-1.5.x", cmd = "git add . && git reset --hard", folder="patches_dir"},
+    {task = "run_subprocess", resource = "fanver-modded-1.7.x", cmd = "git add . && git reset --hard", folder="patches_dir"},
+    {task = "run_subprocess", resource = "fanver-modded-1.10.x", cmd = "git add . && git reset --hard", folder="patches_dir"},
+    {task = "run_subprocess", resource = "fanver-modded-1.12.x", cmd = "git add . && git reset --hard", folder="patches_dir"},
+    {task = "run_subprocess", resource = "fanver-modded-1.15.x", cmd = "git add . && git reset --hard", folder="patches_dir"},
 ]
 
 prune_all_jstr = [
@@ -138,9 +153,11 @@ omni_update_soartex = [
     {task = "run_pipeline", pipeline = "extract_all_default"},
     {task = "run_pipeline", pipeline = "merge_all_default"},
     {task = "run_pipeline", pipeline = "merge_all_soartex"},
+    {task = "run_pipeline", pipeline = "reset_fanver" },
     {task = "run_pipeline", pipeline = "port_all_fanver" },
     {task = "run_pipeline", pipeline = "back_port_all_fanver" },
-    {task = "run_pipeline", pipeline = "prune_all_fanver" }
+#    {task = "run_pipeline", pipeline = "prune_all_fanver" },
+    {task = "run_pipeline", pipeline = "detect_overwrites_fanver" }
 ]
 
 omni_update_jstr = [
