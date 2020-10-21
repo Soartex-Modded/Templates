@@ -21,6 +21,7 @@ def run_pipeline(config, resources, pipelines):
         'download_resource': run_download_resource,
         'run_pipeline': run_pipeline,
         'run_parallel': run_parallel,
+        'run_apply': run_apply,
         'run_subprocess': run_run_subprocess
     }
 
@@ -43,6 +44,22 @@ def run_parallel(config, resources, pipelines):
         raise ValueError(f"Pipeline not recognized: {config['pipeline']}")
 
     tasks.parallel(pipelines[config['pipeline']], run_pipeline, args=(resources, pipelines))
+
+
+def run_apply(config, resources, pipelines):
+    print("Applying task to multiple resources.")
+
+    # construct a new pipeline
+    resource_names = config['resources']
+    del config['resources']
+    pipeline = [{**config, 'resource': resource_name, 'task': config['apply_task']} for resource_name in resource_names]
+
+    # register pipeline
+    pipeline_name = json.dumps(pipeline, indent=4)
+    pipelines[pipeline_name] = pipeline
+
+    # call registered pipeline
+    run_pipeline({"task": "run_pipeline", "pipeline": pipeline_name}, resources, pipelines)
 
 
 def run_extract_default(config, resources, pipelines):
