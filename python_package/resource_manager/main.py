@@ -8,6 +8,17 @@ ENV_VAR_PIPELINES_CONFIG = "RESOURCE_MANAGER_PIPELINES_PATH"
 ENV_VAR_RESOURCES_CONFIG = "RESOURCE_MANAGER_RESOURCES_PATH"
 
 
+def main():
+    """Command line interface"""
+    parser = argparse.ArgumentParser(description='Minecraft resource manager')
+    parser.add_argument('-p', '--pipelines', help='Pipelines config', required=False)
+    parser.add_argument('-r', '--resources', help='Resources config', required=False)
+    parser.add_argument('pipeline', help='Choose a sequence of tasks')
+    args = parser.parse_args()
+
+    run(pipeline=args.pipeline, resources_path=args.resources, pipelines_path=args.pipelines)
+
+
 def run(pipeline: str, resources_path=None, pipelines_path=None):
     """
     Programmatic interface
@@ -43,11 +54,4 @@ def run(pipeline: str, resources_path=None, pipelines_path=None):
 
 
 if __name__ == "__main__":
-    """Command line interface"""
-    parser = argparse.ArgumentParser(description='Minecraft resource manager')
-    parser.add_argument('-p', '--pipelines', help='Pipelines config', required=False)
-    parser.add_argument('-r', '--resources', help='Resources config', required=False)
-    parser.add_argument('pipeline', help='Choose a sequence of tasks')
-    args = parser.parse_args()
-
-    run(pipeline=args.pipeline, resources_path=args.resources, pipelines_path=args.pipelines)
+    main()

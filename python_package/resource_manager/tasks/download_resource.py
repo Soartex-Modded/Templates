@@ -21,7 +21,7 @@ def download_resource(resource):
         if os.path.exists(pack_dir):
             shutil.rmtree(pack_dir)
 
-        extensions = ('.info', '.mcmeta', '.png', '.properties')
+        extensions = ('.info', '.mcmeta', '.png', '.properties', '.json')
         with zipfile.ZipFile(jar_path, 'r') as zip_file:
             [zip_file.extract(file, pack_dir) for file in zip_file.namelist() if file.endswith(extensions)]
 
