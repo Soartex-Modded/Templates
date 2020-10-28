@@ -1,542 +1,1 @@
-# to run any of these, follow the setup instructions, then call `resource_manage [pipeline task]`. For example:
-# > resource_manage 1.7_dev_soartex
-
-# downloads {default, soartex, jstr} x {vanilla, mod} assets
-download_all = [
-    {task = "run_pipeline", pipeline = "download_default"},
-    {task = "run_pipeline", pipeline = "download_soartex"},
-    {task = "run_pipeline", pipeline = "download_jstr"}
-]
-
-# delete the 1.12 modded pack and rebuild via patches
-"1.12_merge_fanver" = [
-    {task = "remove_resource", resource = "fanver-modded-1.12.x", folder = "pack_dir"},
-    {task = "merge_patches", resource = "fanver-modded-1.12.x"},
-]
-
-# delete the 1.7 modded pack and rebuild via patches
-"1.7_merge_fanver" = [
-    {task = "remove_resource", resource = "fanver-modded-1.7.x", folder = "pack_dir"},
-    {task = "merge_patches", resource = "fanver-modded-1.7.x"},
-]
-
-
-# USEFUL: run this in the background while developing on 1.12 soartex patch sets
-"1.12_dev_soartex" = [
-    #    {task = "extract_default", resource = "default-modded-1.12.x"},
-
-    # build merged resource packs from the patch directories
-    {task = "merge_patches", resource = "fanver-modded-1.12.x"},
-    {task = "merge_patches", resource = "fanver-modded-base"},
-
-    # link all texture packs with relevant game instances
-    {task = "link_resources", resource = "invictus-vanilla-1.12.x"},
-    {task = "link_resources", resource = "fanver-vanilla-1.12.x"},
-    {task = "link_resources", resource = "fanver-modded-base"},
-    {task = "link_resources", resource = "fanver-modded-1.12.x"},
-
-    # watch for changes/update merged packs in any of the specified resources
-    {task = "watch_changes", resources = ["fanver-modded-base", "fanver-modded-1.12.x"]}
-]
-
-# USEFUL: run this in the background while developing on 1.7 soartex patch sets
-"1.7_dev_soartex" = [
-    # only needs to be run once when mods change
-#    {task = "extract_default", resource = "default-modded-1.7.x"},
-
-    # build merged resource packs from the patch directories
-    {task = "merge_patches", resource = "fanver-modded-1.7.x"},
-    {task = "merge_patches", resource = "invictus-modded-1.7.x"},
-
-    # link all texture packs with relevant game instances
-    {task = "link_resources", resource = "fanver-vanilla-1.7.x"},
-    {task = "link_resources", resource = "fanver-modded-1.7.x"},
-    {task = "link_resources", resource = "invictus-vanilla-1.7.x"},
-    {task = "link_resources", resource = "invictus-modded-1.7.x"},
-    {task = "link_resources", resource = "gtnh-1.7.x"},
-
-    # watch for changes/update merged packs in any of the specified resources
-    {task = "watch_changes", resources = ["fanver-modded-1.7.x", "invictus-modded-1.7.x"]}
-]
-
-# USEFUL: run this in the background while developing on 1.12 jstr patch sets
-"1.12_dev_jstr" = [
-    # only needs to be run once when mods change
-#    {task = "extract_default", resource = "default-modded-1.12.x"},
-
-    # build merged resource packs from the patch directories
-    {task = "merge_patches", resource = "jstr-modded-1.12.x"},
-
-    # link all texture packs with relevant game instances
-    {task = "link_resources", resource = "jstr-vanilla-1.12.x"},
-    {task = "link_resources", resource = "jstr-modded-1.12.x"},
-
-    # watch for changes/update merged packs in any of the specified resources
-    {task = "watch_changes", resources = ["jstr-modded-1.12.x"]}
-]
-
-# delete the modded default textures, unpack mod zips into patches, and merge patches into default pack
-"1.7_merge" = [
-    {task = "remove_resource", resource = "default-modded-1.7.x", folder = "pack_dir"},
-    {task = "extract_default", resource = "default-modded-1.7.x"},
-    {task = "merge_patches", resource = "default-modded-1.7.x"}
-]
-"1.12_merge" = [
-    {task = "remove_resource", resource = "default-modded-1.12.x", folder = "pack_dir"},
-    {task = "extract_default", resource = "default-modded-1.12.x"},
-    {task = "merge_patches", resource = "default-modded-1.12.x"}
-]
-
-
-# environment setup; run ports between all major soartex versions
-omni_update_soartex = [
-    # uncomment to wipe all changes in all fanver repositories
-#    {task = "run_pipeline", pipeline = "reset_fanver_patches" },
-    {task = "run_pipeline", pipeline = "download_default"},
-    {task = "run_pipeline", pipeline = "download_soartex"},
-    {task = "run_pipeline", pipeline = "extract_all_default"},
-    {task = "run_pipeline", pipeline = "merge_all_default"},
-    {task = "run_pipeline", pipeline = "merge_all_soartex"},
-    {task = "run_pipeline", pipeline = "port_all_fanver" },
-    {task = "run_pipeline", pipeline = "back_port_all_fanver" },
-    # this is somewhat lossy and unnecessary. review all changes
-#    {task = "run_pipeline", pipeline = "prune_all_fanver" },
-    {task = "run_pipeline", pipeline = "detect_overwrites_fanver" }
-]
-
-omni_update_jstr = [
-    {task = "run_pipeline", pipeline = "download_default"},
-    {task = "run_pipeline", pipeline = "download_jstr"},
-    {task = "run_pipeline", pipeline = "extract_all_default"},
-    {task = "run_pipeline", pipeline = "merge_all_default"},
-    {task = "run_pipeline", pipeline = "merge_all_jstr"},
-    {task = "run_pipeline", pipeline = "port_all_jstr" },
-    {task = "run_pipeline", pipeline = "back_port_all_jstr" },
-#    {task = "run_pipeline", pipeline = "prune_all_jstr" }
-]
-
-# use md5 hash collisions among default textures to detect identical files
-# use these discovered relationships to fill missing textures
-# oftentimes mod authors rename files, or some mods get forgotten on older mc versions
-port_all_fanver = [
-    {task = "run_pipeline", pipeline = "1.5_to_1.5_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.5_to_1.7_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.7_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.10_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.10_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.12_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.12_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.12_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.15_port_fanver" }
-]
-
-# oftentimes contributions for newer versions are not backported to older versions
-back_port_all_fanver = [
-    {task = "run_pipeline", pipeline = "1.12_to_1.10_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.7_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.7_port_fanver" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.5_port_fanver" },
-]
-
-port_all_jstr = [
-    {task = "run_pipeline", pipeline = "1.5_to_1.5_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.5_to_1.7_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.7_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.10_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.10_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.12_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.12_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.12_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.15_port_jstr" }
-]
-
-back_port_all_jstr = [
-    {task = "run_pipeline", pipeline = "1.12_to_1.10_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.10_to_1.7_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.12_to_1.7_port_jstr" },
-    {task = "run_pipeline", pipeline = "1.7_to_1.5_port_jstr" },
-]
-
-# move resource pack assets that don't overwrite a default texture to an ~unused folder
-# this only modifies resources in texture domains that are present in the default merged pack
-prune_all_fanver = [
-    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/fanver/Pruned-1.5.x"},
-    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x"},
-    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/fanver/Pruned-1.10.x"},
-    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/fanver/Pruned-1.12.x"},
-]
-
-prune_all_jstr = [
-    {task = "prune_files", action = "prune", resource = "jstr-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/jstr/Pruned-1.5.x"},
-    {task = "prune_files", action = "prune", resource = "jstr-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/jstr/Pruned-1.7.x"},
-    {task = "prune_files", action = "prune", resource = "jstr-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/jstr/Pruned-1.10.x"},
-    {task = "prune_files", action = "prune", resource = "jstr-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/jstr/Pruned-1.12.x"},
-]
-
-# downloads default vanilla and mod assets
-download_default = [
-    # mods (scraped from curseforge)
-    {task = "run_pipeline", pipeline = "download_1k_mods"},
-
-    # vanilla packs
-    {task = "download_resource", resource = "default-vanilla-1.5.x"},
-    {task = "download_resource", resource = "default-vanilla-1.7.x"},
-    {task = "download_resource", resource = "default-vanilla-1.10.x"},
-    {task = "download_resource", resource = "default-vanilla-1.12.x"},
-]
-
-[[download_soartex]]
-task = "run_apply"
-apply_task = "download_resource"
-resources = [
-    "fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x",
-    "fanver-vanilla-1.5.x", "fanver-vanilla-1.7.x", "fanver-vanilla-1.10.x", "fanver-vanilla-1.12.x",
-    "invictus-vanilla-1.7.x", "invictus-vanilla-1.12.x",
-    "fanver-modded-base", "gtnh-1.7.x", "invictus-modded-1.7.x", "modded-server-data"
-]
-
-# sequentially run the "download resource" task for all of the listed resources
-[[download_jstr]]
-task = "run_apply"
-apply_task = "download_resource"
-resources = [
-    "jstr-modded-1.5.x", "jstr-modded-1.7.x", "jstr-modded-1.10.x", "jstr-modded-1.12.x",
-    "jstr-vanilla-1.7.x", "jstr-vanilla-1.10.x", "jstr-vanilla-1.12.x"
-]
-
-# extract all default modded textures from .jars into patches
-[[extract_all_default]]
-task = "run_apply"
-apply_task = "extract_default"
-resources = ["default-modded-1.5.x", "default-modded-1.7.x", "default-modded-1.10.x", "default-modded-1.12.x", "default-modded-1.15.x"]
-
-# merge all default patches into default resource packs
-[[merge_all_default]]
-task = "run_apply"
-apply_task = "merge_patches"
-resources = ["default-modded-1.5.x", "default-modded-1.7.x", "default-modded-1.10.x", "default-modded-1.12.x", "default-modded-1.15.x"]
-
-# merge all soartex patches into soartex resource packs
-[[merge_all_soartex]]
-task = "run_apply"
-apply_task = "merge_patches"
-resources = ["fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "invictus-modded-1.7.x"]
-
-# merge all jstr patches into jstr resource packs
-[[merge_all_jstr]]
-task = "run_apply"
-apply_task = "merge_patches"
-resources = ["jstr-modded-1.5.x", "jstr-modded-1.7.x", "jstr-modded-1.10.x", "jstr-modded-1.12.x"]
-
-# delete staged changes in all repositories
-[[reset_fanver_patches]]
-task = "run_apply"
-apply_task = "run_subprocess"
-resources = ["fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]
-cmd = "git add . && git reset --hard"
-folder = "patches_dir"
-
-[[fanver_fix_mod_jsons]]
-task = "run_apply"
-apply_task = "fix_mod_jsons"
-resources = ["fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]
-#[[fanver_fix_mod_jsons]]
-#task = "run_apply"
-#apply_task = "run_subprocess"
-#resources = ["fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]
-##cmd = "git add . && git reset --hard && git pull"
-##cmd = "git add . && git commit -m \"Fix mod.jsons and patch names\" && git push"
-#folder = "patches_dir"
-
-# print paths to files that are overwritten by patches multiple times
-[[detect_overwrites_fanver]]
-task = "run_apply"
-apply_task = "detect_overwrites"
-resources = ["fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x"]
-
-
-# download up to 1000 mods for each of the five minor versions of minecraft
-[["download_1k_mods"]]
-task = "download_mods"
-database_path = "~/graphics/manager/manager.db"
-mod_limit = 1000
-["download_1k_mods".mods_dirs]
-5 = "~/graphics/default/Downloaded-Mods-1.5.x/"
-7 = "~/graphics/default/Downloaded-Mods-1.7.x/"
-10 = "~/graphics/default/Downloaded-Mods-1.10.x/"
-12 = "~/graphics/default/Downloaded-Mods-1.12.x/"
-15 = "~/graphics/default/Downloaded-Mods-1.15.x/"
-
-
-# INTERNAL VERSION PORTS
-# for reused vanilla textures
-[["1.5_to_1.5_port_fanver"]]
-task = "port_patches"
-default_prior = "default-vanilla-1.5.x"
-default_post = "default-modded-1.5.x"
-resource_prior = "fanver-vanilla-1.5.x"
-resource_post = "fanver-modded-1.5.x"
-action = "copy"
-# for modded textures with duplicates
-[["1.5_to_1.5_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.5.x"
-default_post = "default-modded-1.5.x"
-resource_prior = "fanver-modded-1.5.x"
-resource_post = "fanver-modded-1.5.x"
-action = "copy"
-
-[["1.7_to_1.7_port_fanver"]]
-task = "port_patches"
-default_prior = "default-vanilla-1.7.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "fanver-vanilla-1.7.x"
-resource_post = "fanver-modded-1.7.x"
-action = "copy"
-[["1.7_to_1.7_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "fanver-modded-1.7.x"
-resource_post = "fanver-modded-1.7.x"
-action = "copy"
-
-[["1.10_to_1.10_port_fanver"]]
-task = "port_patches"
-default_prior = "default-vanilla-1.10.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "fanver-vanilla-1.10.x"
-resource_post = "fanver-modded-1.10.x"
-action = "copy"
-[["1.10_to_1.10_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.10.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "fanver-modded-1.10.x"
-resource_post = "fanver-modded-1.10.x"
-action = "copy"
-
-[["1.12_to_1.12_port_fanver"]]
-task = "port_patches"
-default_prior = "default-vanilla-1.12.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "fanver-vanilla-1.12.x"
-resource_post = "fanver-modded-1.12.x"
-action = "copy"
-[["1.12_to_1.12_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "fanver-modded-1.12.x"
-resource_post = "fanver-modded-1.12.x"
-action = "copy"
-
-
-# CROSS VERSION PORTS
-[["1.5_to_1.7_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.5.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "fanver-modded-1.5.x"
-resource_post = "fanver-modded-1.7.x"
-action = "copy"
-
-[["1.7_to_1.10_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "fanver-modded-1.7.x"
-resource_post = "fanver-modded-1.10.x"
-action = "copy"
-
-[["1.7_to_1.12_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "fanver-modded-1.7.x"
-resource_post = "fanver-modded-1.12.x"
-action = "copy"
-
-[["1.10_to_1.12_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.10.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "fanver-modded-1.10.x"
-resource_post = "fanver-modded-1.12.x"
-action = "copy"
-
-[["1.12_to_1.15_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.15.x"
-resource_prior = "fanver-modded-1.12.x"
-resource_post = "fanver-modded-1.15.x"
-action = "copy"
-
-
-# CROSS VERSION BACK PORTS
-[["1.12_to_1.10_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "fanver-modded-1.12.x"
-resource_post = "fanver-modded-1.10.x"
-action = "copy"
-
-[["1.10_to_1.7_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.10.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "fanver-modded-1.10.x"
-resource_post = "fanver-modded-1.7.x"
-action = "copy"
-
-[["1.12_to_1.7_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "fanver-modded-1.12.x"
-resource_post = "fanver-modded-1.7.x"
-action = "copy"
-
-[["1.7_to_1.5_port_fanver"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.5.x"
-resource_prior = "fanver-modded-1.7.x"
-resource_post = "fanver-modded-1.5.x"
-action = "copy"
-
-
-
-
-# INTERNAL VERSION PORTS
-# for modded textures with duplicates
-[["1.5_to_1.5_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.5.x"
-default_post = "default-modded-1.5.x"
-resource_prior = "jstr-modded-1.5.x"
-resource_post = "jstr-modded-1.5.x"
-action = "copy"
-
-[["1.7_to_1.7_port_jstr"]]
-task = "port_patches"
-default_prior = "default-vanilla-1.7.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "jstr-vanilla-1.7.x"
-resource_post = "jstr-modded-1.7.x"
-action = "copy"
-[["1.7_to_1.7_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "jstr-modded-1.7.x"
-resource_post = "jstr-modded-1.7.x"
-action = "copy"
-
-[["1.10_to_1.10_port_jstr"]]
-task = "port_patches"
-default_prior = "default-vanilla-1.10.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "jstr-vanilla-1.10.x"
-resource_post = "jstr-modded-1.10.x"
-action = "copy"
-[["1.10_to_1.10_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.10.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "jstr-modded-1.10.x"
-resource_post = "jstr-modded-1.10.x"
-action = "copy"
-
-[["1.12_to_1.12_port_jstr"]]
-task = "port_patches"
-default_prior = "default-vanilla-1.12.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "jstr-vanilla-1.12.x"
-resource_post = "jstr-modded-1.12.x"
-action = "copy"
-[["1.12_to_1.12_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "jstr-modded-1.12.x"
-resource_post = "jstr-modded-1.12.x"
-action = "copy"
-
-
-# CROSS VERSION PORTS
-[["1.5_to_1.7_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.5.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "jstr-modded-1.5.x"
-resource_post = "jstr-modded-1.7.x"
-action = "copy"
-
-[["1.7_to_1.10_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "jstr-modded-1.7.x"
-resource_post = "jstr-modded-1.10.x"
-action = "copy"
-
-[["1.7_to_1.12_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "jstr-modded-1.7.x"
-resource_post = "jstr-modded-1.12.x"
-action = "copy"
-
-[["1.10_to_1.12_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.10.x"
-default_post = "default-modded-1.12.x"
-resource_prior = "jstr-modded-1.10.x"
-resource_post = "jstr-modded-1.12.x"
-action = "copy"
-
-[["1.12_to_1.15_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.15.x"
-resource_prior = "jstr-modded-1.12.x"
-resource_post = "jstr-modded-1.15.x"
-action = "copy"
-
-
-# CROSS VERSION BACK PORTS
-[["1.12_to_1.10_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.10.x"
-resource_prior = "jstr-modded-1.12.x"
-resource_post = "jstr-modded-1.10.x"
-action = "copy"
-
-[["1.10_to_1.7_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.10.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "jstr-modded-1.10.x"
-resource_post = "jstr-modded-1.7.x"
-action = "copy"
-
-[["1.12_to_1.7_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.12.x"
-default_post = "default-modded-1.7.x"
-resource_prior = "jstr-modded-1.12.x"
-resource_post = "jstr-modded-1.7.x"
-action = "copy"
-
-[["1.7_to_1.5_port_jstr"]]
-task = "port_patches"
-default_prior = "default-modded-1.7.x"
-default_post = "default-modded-1.5.x"
-resource_prior = "jstr-modded-1.7.x"
-resource_post = "jstr-modded-1.5.x"
-action = "copy"
+# to run any of these, follow the setup instructions, then call `resource_manage [pipeline task]`. For example:# > resource_manage 1.7_dev_soartex# downloads {default, soartex, jstr} x {vanilla, mod} assetsdownload_all = [    {task = "run_pipeline", pipeline = "download_default"},    {task = "run_pipeline", pipeline = "download_soartex"},    {task = "run_pipeline", pipeline = "download_jstr"}]# delete the 1.12 modded pack and rebuild via patches"1.12_merge_fanver" = [    {task = "remove_resource", resource = "fanver-modded-1.12.x", folder = "pack_dir"},    {task = "merge_patches", resource = "fanver-modded-1.12.x"},]# delete the 1.7 modded pack and rebuild via patches"1.7_merge_fanver" = [    {task = "remove_resource", resource = "fanver-modded-1.7.x", folder = "pack_dir"},    {task = "merge_patches", resource = "fanver-modded-1.7.x"},]# USEFUL: run this in the background while developing on 1.12 soartex patch sets"1.12_dev_soartex" = [    #    {task = "extract_default", resource = "default-modded-1.12.x"},    # build merged resource packs from the patch directories#    {task = "merge_patches", resource = "fanver-modded-1.12.x"},#    {task = "merge_patches", resource = "fanver-modded-base"},    # link all texture packs with relevant game instances    {task = "link_resources", resource = "invictus-vanilla-1.12.x"},    {task = "link_resources", resource = "fanver-vanilla-1.12.x"},    {task = "link_resources", resource = "fanver-modded-base"},    {task = "link_resources", resource = "fanver-modded-1.12.x"},    # insert resized default textures into patches    {task = "insert_placeholders", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", scale = 4},    # watch for changes/update merged packs in any of the specified resources    {task = "watch_changes", resources = ["fanver-modded-base", "fanver-modded-1.12.x"]}]# USEFUL: run this in the background while developing on 1.7 soartex patch sets"1.7_dev_soartex" = [    # only needs to be run once when mods change#    {task = "extract_default", resource = "default-modded-1.7.x"},    # build merged resource packs from the patch directories    {task = "merge_patches", resource = "fanver-modded-1.7.x"},    {task = "merge_patches", resource = "invictus-modded-1.7.x"},    # link all texture packs with relevant game instances    {task = "link_resources", resource = "fanver-vanilla-1.7.x"},    {task = "link_resources", resource = "fanver-modded-1.7.x"},    {task = "link_resources", resource = "invictus-vanilla-1.7.x"},    {task = "link_resources", resource = "invictus-modded-1.7.x"},    {task = "link_resources", resource = "gtnh-1.7.x"},    # watch for changes/update merged packs in any of the specified resources    {task = "watch_changes", resources = ["fanver-modded-1.7.x", "invictus-modded-1.7.x"]}]# USEFUL: run this in the background while developing on 1.12 jstr patch sets"1.12_dev_jstr" = [    # only needs to be run once when mods change#    {task = "extract_default", resource = "default-modded-1.12.x"},    # build merged resource packs from the patch directories    {task = "merge_patches", resource = "jstr-modded-1.12.x"},    # link all texture packs with relevant game instances    {task = "link_resources", resource = "jstr-vanilla-1.12.x"},    {task = "link_resources", resource = "jstr-modded-1.12.x"},    # watch for changes/update merged packs in any of the specified resources    {task = "watch_changes", resources = ["jstr-modded-1.12.x"]}]# delete the modded default textures, unpack mod zips into patches, and merge patches into default pack"1.7_merge" = [    {task = "remove_resource", resource = "default-modded-1.7.x", folder = "pack_dir"},    {task = "extract_default", resource = "default-modded-1.7.x"},    {task = "merge_patches", resource = "default-modded-1.7.x"}]"1.12_merge" = [    {task = "remove_resource", resource = "default-modded-1.12.x", folder = "pack_dir"},    {task = "extract_default", resource = "default-modded-1.12.x"},    {task = "merge_patches", resource = "default-modded-1.12.x"}]# environment setup; run ports between all major soartex versionsomni_update_soartex = [    # uncomment to wipe all changes in all fanver repositories#    {task = "run_pipeline", pipeline = "reset_fanver_patches" },    {task = "run_pipeline", pipeline = "download_default"},    {task = "run_pipeline", pipeline = "download_soartex"},    {task = "run_pipeline", pipeline = "extract_all_default"},    {task = "run_pipeline", pipeline = "merge_all_default"},    {task = "run_pipeline", pipeline = "merge_all_soartex"},    {task = "run_pipeline", pipeline = "port_all_fanver" },    {task = "run_pipeline", pipeline = "back_port_all_fanver" },    # this is somewhat lossy and unnecessary. review all changes#    {task = "run_pipeline", pipeline = "prune_all_fanver" },    {task = "run_pipeline", pipeline = "detect_overwrites_fanver" }]omni_update_jstr = [    {task = "run_pipeline", pipeline = "download_default"},    {task = "run_pipeline", pipeline = "download_jstr"},    {task = "run_pipeline", pipeline = "extract_all_default"},    {task = "run_pipeline", pipeline = "merge_all_default"},    {task = "run_pipeline", pipeline = "merge_all_jstr"},    {task = "run_pipeline", pipeline = "port_all_jstr" },    {task = "run_pipeline", pipeline = "back_port_all_jstr" },#    {task = "run_pipeline", pipeline = "prune_all_jstr" }]# use md5 hash collisions among default textures to detect identical files# use these discovered relationships to fill missing textures# oftentimes mod authors rename files, or some mods get forgotten on older mc versionsport_all_fanver = [    {task = "run_pipeline", pipeline = "1.5_to_1.5_port_fanver" },    {task = "run_pipeline", pipeline = "1.5_to_1.7_port_fanver" },    {task = "run_pipeline", pipeline = "1.7_to_1.7_port_fanver" },    {task = "run_pipeline", pipeline = "1.7_to_1.10_port_fanver" },    {task = "run_pipeline", pipeline = "1.10_to_1.10_port_fanver" },    {task = "run_pipeline", pipeline = "1.7_to_1.12_port_fanver" },    {task = "run_pipeline", pipeline = "1.10_to_1.12_port_fanver" },    {task = "run_pipeline", pipeline = "1.12_to_1.12_port_fanver" },    {task = "run_pipeline", pipeline = "1.12_to_1.15_port_fanver" }]# oftentimes contributions for newer versions are not backported to older versionsback_port_all_fanver = [    {task = "run_pipeline", pipeline = "1.12_to_1.10_port_fanver" },    {task = "run_pipeline", pipeline = "1.10_to_1.7_port_fanver" },    {task = "run_pipeline", pipeline = "1.12_to_1.7_port_fanver" },    {task = "run_pipeline", pipeline = "1.7_to_1.5_port_fanver" },]port_all_jstr = [    {task = "run_pipeline", pipeline = "1.5_to_1.5_port_jstr" },    {task = "run_pipeline", pipeline = "1.5_to_1.7_port_jstr" },    {task = "run_pipeline", pipeline = "1.7_to_1.7_port_jstr" },    {task = "run_pipeline", pipeline = "1.7_to_1.10_port_jstr" },    {task = "run_pipeline", pipeline = "1.10_to_1.10_port_jstr" },    {task = "run_pipeline", pipeline = "1.7_to_1.12_port_jstr" },    {task = "run_pipeline", pipeline = "1.10_to_1.12_port_jstr" },    {task = "run_pipeline", pipeline = "1.12_to_1.12_port_jstr" },    {task = "run_pipeline", pipeline = "1.12_to_1.15_port_jstr" }]back_port_all_jstr = [    {task = "run_pipeline", pipeline = "1.12_to_1.10_port_jstr" },    {task = "run_pipeline", pipeline = "1.10_to_1.7_port_jstr" },    {task = "run_pipeline", pipeline = "1.12_to_1.7_port_jstr" },    {task = "run_pipeline", pipeline = "1.7_to_1.5_port_jstr" },]# move resource pack assets that don't overwrite a default texture to an ~unused folder# this only modifies resources in texture domains that are present in the default merged packprune_all_fanver = [    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/fanver/Pruned-1.5.x"},    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/fanver/Pruned-1.7.x"},    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/fanver/Pruned-1.10.x"},    {task = "prune_files", action = "~unused", resource = "fanver-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/fanver/Pruned-1.12.x"},]prune_all_jstr = [    {task = "prune_files", action = "prune", resource = "jstr-modded-1.5.x", resource_default = "default-modded-1.5.x", pruned_dir = "~/graphics/jstr/Pruned-1.5.x"},    {task = "prune_files", action = "prune", resource = "jstr-modded-1.7.x", resource_default = "default-modded-1.7.x", pruned_dir = "~/graphics/jstr/Pruned-1.7.x"},    {task = "prune_files", action = "prune", resource = "jstr-modded-1.10.x", resource_default = "default-modded-1.10.x", pruned_dir = "~/graphics/jstr/Pruned-1.10.x"},    {task = "prune_files", action = "prune", resource = "jstr-modded-1.12.x", resource_default = "default-modded-1.12.x", pruned_dir = "~/graphics/jstr/Pruned-1.12.x"},]"build_guis_fanver_1.7" = [    {task = "build_guis", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", debug_path = "~/graphics/fanver/Templates/python_package/app_test.png"}]"find_similar_fanver_1.7" = [    {task = "find_similar", resource = "fanver-modded-1.7.x", resource_default = "default-modded-1.7.x", scale = 4}]# downloads default vanilla and mod assetsdownload_default = [    # mods (scraped from curseforge)    {task = "run_pipeline", pipeline = "download_1k_mods"},    # vanilla packs    {task = "download_resource", resource = "default-vanilla-1.5.x"},    {task = "download_resource", resource = "default-vanilla-1.7.x"},    {task = "download_resource", resource = "default-vanilla-1.10.x"},    {task = "download_resource", resource = "default-vanilla-1.12.x"},][[download_soartex]]task = "run_apply"apply_task = "download_resource"resources = [    "fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x",    "fanver-vanilla-1.5.x", "fanver-vanilla-1.7.x", "fanver-vanilla-1.10.x", "fanver-vanilla-1.12.x",    "invictus-vanilla-1.7.x", "invictus-vanilla-1.12.x",    "fanver-modded-base", "gtnh-1.7.x", "invictus-modded-1.7.x", "modded-server-data"]# sequentially run the "download resource" task for all of the listed resources[[download_jstr]]task = "run_apply"apply_task = "download_resource"resources = [    "jstr-modded-1.5.x", "jstr-modded-1.7.x", "jstr-modded-1.10.x", "jstr-modded-1.12.x",    "jstr-vanilla-1.7.x", "jstr-vanilla-1.10.x", "jstr-vanilla-1.12.x"]# extract all default modded textures from .jars into patches[[extract_all_default]]task = "run_apply"apply_task = "extract_default"resources = ["default-modded-1.5.x", "default-modded-1.7.x", "default-modded-1.10.x", "default-modded-1.12.x", "default-modded-1.15.x"]# merge all default patches into default resource packs[[merge_all_default]]task = "run_apply"apply_task = "merge_patches"resources = ["default-modded-1.5.x", "default-modded-1.7.x", "default-modded-1.10.x", "default-modded-1.12.x", "default-modded-1.15.x"]# merge all soartex patches into soartex resource packs[[merge_all_soartex]]task = "run_apply"apply_task = "merge_patches"resources = ["fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "invictus-modded-1.7.x"]# merge all jstr patches into jstr resource packs[[merge_all_jstr]]task = "run_apply"apply_task = "merge_patches"resources = ["jstr-modded-1.5.x", "jstr-modded-1.7.x", "jstr-modded-1.10.x", "jstr-modded-1.12.x"]# delete staged changes in all repositories[[reset_fanver_patches]]task = "run_apply"apply_task = "run_subprocess"resources = ["fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]cmd = "git add . && git reset --hard"folder = "patches_dir"[[fanver_fix_mod_jsons]]task = "run_apply"apply_task = "fix_mod_jsons"resources = ["fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]#[[fanver_fix_mod_jsons]]#task = "run_apply"#apply_task = "run_subprocess"#resources = ["fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x", "fanver-modded-1.15.x"]##cmd = "git add . && git reset --hard && git pull"##cmd = "git add . && git commit -m \"Fix mod.jsons and patch names\" && git push"#folder = "patches_dir"# print paths to files that are overwritten by patches multiple times[[detect_overwrites_fanver]]task = "run_apply"apply_task = "detect_overwrites"resources = ["fanver-modded-1.5.x", "fanver-modded-1.7.x", "fanver-modded-1.10.x", "fanver-modded-1.12.x"]# download up to 1000 mods for each of the five minor versions of minecraft[["download_1k_mods"]]task = "download_mods"database_path = "~/graphics/manager/manager.db"mod_limit = 1000["download_1k_mods".mods_dirs]5 = "~/graphics/default/Downloaded-Mods-1.5.x/"7 = "~/graphics/default/Downloaded-Mods-1.7.x/"10 = "~/graphics/default/Downloaded-Mods-1.10.x/"12 = "~/graphics/default/Downloaded-Mods-1.12.x/"15 = "~/graphics/default/Downloaded-Mods-1.15.x/"# INTERNAL VERSION PORTS# for reused vanilla textures[["1.5_to_1.5_port_fanver"]]task = "port_patches"default_prior = "default-vanilla-1.5.x"default_post = "default-modded-1.5.x"resource_prior = "fanver-vanilla-1.5.x"resource_post = "fanver-modded-1.5.x"action = "copy"# for modded textures with duplicates[["1.5_to_1.5_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.5.x"default_post = "default-modded-1.5.x"resource_prior = "fanver-modded-1.5.x"resource_post = "fanver-modded-1.5.x"action = "copy"[["1.7_to_1.7_port_fanver"]]task = "port_patches"default_prior = "default-vanilla-1.7.x"default_post = "default-modded-1.7.x"resource_prior = "fanver-vanilla-1.7.x"resource_post = "fanver-modded-1.7.x"action = "copy"[["1.7_to_1.7_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.7.x"resource_prior = "fanver-modded-1.7.x"resource_post = "fanver-modded-1.7.x"action = "copy"[["1.10_to_1.10_port_fanver"]]task = "port_patches"default_prior = "default-vanilla-1.10.x"default_post = "default-modded-1.10.x"resource_prior = "fanver-vanilla-1.10.x"resource_post = "fanver-modded-1.10.x"action = "copy"[["1.10_to_1.10_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.10.x"default_post = "default-modded-1.10.x"resource_prior = "fanver-modded-1.10.x"resource_post = "fanver-modded-1.10.x"action = "copy"[["1.12_to_1.12_port_fanver"]]task = "port_patches"default_prior = "default-vanilla-1.12.x"default_post = "default-modded-1.12.x"resource_prior = "fanver-vanilla-1.12.x"resource_post = "fanver-modded-1.12.x"action = "copy"[["1.12_to_1.12_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.12.x"resource_prior = "fanver-modded-1.12.x"resource_post = "fanver-modded-1.12.x"action = "copy"# CROSS VERSION PORTS[["1.5_to_1.7_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.5.x"default_post = "default-modded-1.7.x"resource_prior = "fanver-modded-1.5.x"resource_post = "fanver-modded-1.7.x"action = "copy"[["1.7_to_1.10_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.10.x"resource_prior = "fanver-modded-1.7.x"resource_post = "fanver-modded-1.10.x"action = "copy"[["1.7_to_1.12_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.12.x"resource_prior = "fanver-modded-1.7.x"resource_post = "fanver-modded-1.12.x"action = "copy"[["1.10_to_1.12_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.10.x"default_post = "default-modded-1.12.x"resource_prior = "fanver-modded-1.10.x"resource_post = "fanver-modded-1.12.x"action = "copy"[["1.12_to_1.15_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.15.x"resource_prior = "fanver-modded-1.12.x"resource_post = "fanver-modded-1.15.x"action = "copy"# CROSS VERSION BACK PORTS[["1.12_to_1.10_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.10.x"resource_prior = "fanver-modded-1.12.x"resource_post = "fanver-modded-1.10.x"action = "copy"[["1.10_to_1.7_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.10.x"default_post = "default-modded-1.7.x"resource_prior = "fanver-modded-1.10.x"resource_post = "fanver-modded-1.7.x"action = "copy"[["1.12_to_1.7_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.7.x"resource_prior = "fanver-modded-1.12.x"resource_post = "fanver-modded-1.7.x"action = "copy"[["1.7_to_1.5_port_fanver"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.5.x"resource_prior = "fanver-modded-1.7.x"resource_post = "fanver-modded-1.5.x"action = "copy"# INTERNAL VERSION PORTS# for modded textures with duplicates[["1.5_to_1.5_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.5.x"default_post = "default-modded-1.5.x"resource_prior = "jstr-modded-1.5.x"resource_post = "jstr-modded-1.5.x"action = "copy"[["1.7_to_1.7_port_jstr"]]task = "port_patches"default_prior = "default-vanilla-1.7.x"default_post = "default-modded-1.7.x"resource_prior = "jstr-vanilla-1.7.x"resource_post = "jstr-modded-1.7.x"action = "copy"[["1.7_to_1.7_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.7.x"resource_prior = "jstr-modded-1.7.x"resource_post = "jstr-modded-1.7.x"action = "copy"[["1.10_to_1.10_port_jstr"]]task = "port_patches"default_prior = "default-vanilla-1.10.x"default_post = "default-modded-1.10.x"resource_prior = "jstr-vanilla-1.10.x"resource_post = "jstr-modded-1.10.x"action = "copy"[["1.10_to_1.10_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.10.x"default_post = "default-modded-1.10.x"resource_prior = "jstr-modded-1.10.x"resource_post = "jstr-modded-1.10.x"action = "copy"[["1.12_to_1.12_port_jstr"]]task = "port_patches"default_prior = "default-vanilla-1.12.x"default_post = "default-modded-1.12.x"resource_prior = "jstr-vanilla-1.12.x"resource_post = "jstr-modded-1.12.x"action = "copy"[["1.12_to_1.12_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.12.x"resource_prior = "jstr-modded-1.12.x"resource_post = "jstr-modded-1.12.x"action = "copy"# CROSS VERSION PORTS[["1.5_to_1.7_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.5.x"default_post = "default-modded-1.7.x"resource_prior = "jstr-modded-1.5.x"resource_post = "jstr-modded-1.7.x"action = "copy"[["1.7_to_1.10_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.10.x"resource_prior = "jstr-modded-1.7.x"resource_post = "jstr-modded-1.10.x"action = "copy"[["1.7_to_1.12_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.12.x"resource_prior = "jstr-modded-1.7.x"resource_post = "jstr-modded-1.12.x"action = "copy"[["1.10_to_1.12_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.10.x"default_post = "default-modded-1.12.x"resource_prior = "jstr-modded-1.10.x"resource_post = "jstr-modded-1.12.x"action = "copy"[["1.12_to_1.15_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.15.x"resource_prior = "jstr-modded-1.12.x"resource_post = "jstr-modded-1.15.x"action = "copy"# CROSS VERSION BACK PORTS[["1.12_to_1.10_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.10.x"resource_prior = "jstr-modded-1.12.x"resource_post = "jstr-modded-1.10.x"action = "copy"[["1.10_to_1.7_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.10.x"default_post = "default-modded-1.7.x"resource_prior = "jstr-modded-1.10.x"resource_post = "jstr-modded-1.7.x"action = "copy"[["1.12_to_1.7_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.12.x"default_post = "default-modded-1.7.x"resource_prior = "jstr-modded-1.12.x"resource_post = "jstr-modded-1.7.x"action = "copy"[["1.7_to_1.5_port_jstr"]]task = "port_patches"default_prior = "default-modded-1.7.x"default_post = "default-modded-1.5.x"resource_prior = "jstr-modded-1.7.x"resource_post = "jstr-modded-1.5.x"action = "copy"

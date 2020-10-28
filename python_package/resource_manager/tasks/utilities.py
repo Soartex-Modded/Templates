@@ -11,7 +11,7 @@ def link_resource(link_dirs, output_dir):
     for from_dir in link_dirs:
         from_dir = os.path.expanduser(from_dir)
         if not os.path.exists(from_dir):
-            os.symlink(output_dir, from_dir)
+            os.symlink(output_dir, from_dir, target_is_directory=True)
 
 
 def unlink_resource(link_dirs):

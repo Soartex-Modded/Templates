@@ -9,3 +9,6 @@ from .port_patches import *
 from .prune_files import *
 from .utilities import *
 from .watch_changes import *
+from .build_guis import *
+from .insert_placeholders import *
+from .find_similar import *

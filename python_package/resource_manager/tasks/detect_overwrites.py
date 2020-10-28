@@ -1,5 +1,5 @@
-import os
 import json
+import os
 
 
 def detect_overwrites(patches_dir):
@@ -85,6 +85,7 @@ def set_deep(tree, path, value):
     Set the value at path in a tree of dictionaries.
     :param tree: nested dictionaries
     :param path: array of dictionary keys to follow
+    :param value: literal to set at the end of the path
     :return: The value at the end of the path, or None
     """
     for key in path[:-1]:

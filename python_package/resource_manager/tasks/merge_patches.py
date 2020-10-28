@@ -10,13 +10,14 @@ def set_deep(obj, path, value):
     obj[path[-1]] = value
 
 
-def merge_patches(patches_dir, pack_dir, pack_format, enable_patch_map):
+def merge_patches(patches_dir, pack_dir, pack_format: int, enable_patch_map: bool = True, delete_defaults: bool = True):
     """
     delete and (re)make the resource pack of merged patches
     :param patches_dir: location of patches
     :param pack_dir: location to output merged patches
     :param pack_format: necessary metadata to build pack.json
     :param enable_patch_map: create a patch_map.json file with the source patch of each texture
+    :param delete_defaults: delete filenames starting with __default_
     """
     patches_dir = os.path.expanduser(patches_dir)
     pack_dir = os.path.expanduser(pack_dir)
@@ -67,3 +68,9 @@ def merge_patches(patches_dir, pack_dir, pack_format, enable_patch_map):
         patch_map_path = os.path.join(pack_dir, "patch_map.json")
         with open(patch_map_path, 'w') as patch_map_file:
             json.dump(patch_map, patch_map_file, indent=4)
+
+    if delete_defaults:
+        for file_dir, _, file_names in os.walk(pack_dir):
+            for file_name in file_names:
+                if file_name.startswith("__default_"):
+                    os.remove(os.path.join(file_dir, file_name))

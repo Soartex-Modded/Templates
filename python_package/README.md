@@ -46,14 +46,27 @@ Logs files that are present in multiple patches.
 ### Fix mod.json
 Logs inconsistencies and enforces proper formatting in mod.json files.
 
+### Build GUIs
+Detects templates in default GUI files and uses a bank of resource pack textures to reconstruct textured versions.
+
+### Insert Placeholders
+Inserts resized textures prefixed with `__default_` for any untextured assets into the patches directories they belong in.
+
+### Find Similar
+Creates a workspace containing textures similar to an example. 
+Once you finish texturing assets in the workspace, they are moved into the patches directory.
+If the watch changes script is running, the merged resource pack will also be updated with your changes. 
+
+
 ## Installation
 1. python 3.6 or greater
-2. pip3 install -e .
+2. pip3 install -r requirements.txt
+3. pip3 install -e .
 
 ## How to use
 Type `resource_manage [pipeline_name]` from the terminal to invoke the specified pipeline.
 
-For example, a useful pipeline is `resource_manage 1.7_dev`, which starts a watcher to maintain a resource pack with edits to patches.
+For example, a useful pipeline is `resource_manage 1.7_dev_soartex`, which starts a watcher to maintain a resource pack with edits to patches.
 F3+T from any linked game instances.
 You may want to edit the links in the `resources.toml` to symlink the maintained pack into your minecraft instance.
 

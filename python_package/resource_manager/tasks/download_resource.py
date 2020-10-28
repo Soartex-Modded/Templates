@@ -70,4 +70,3 @@ def download_resource(resource):
             os.makedirs(download_dir, exist_ok=True)
             with zipfile.ZipFile(temp_download_path, 'r') as zip_file:
                 [zip_file.extract(file, download_dir) for file in zip_file.namelist()]
-

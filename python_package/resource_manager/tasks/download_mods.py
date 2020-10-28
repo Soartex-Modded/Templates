@@ -1,11 +1,10 @@
 import json
+import math
+import os
 
 import requests
-
-import os
-import math
-from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy import create_engine
 from sqlalchemy.sql import select
 
 
