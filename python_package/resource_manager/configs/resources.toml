@@ -35,6 +35,14 @@ patches_dir = "~/graphics/default/Modded-1.5.x/"
 pack_dir = "~/graphics_merged/default/Modded-1.5.x/"
 pack_format = 1
 
+["default-modded-1.6.x"]
+mods_dirs = [
+    "~/graphics/default/Downloaded-Mods-1.6.x/"
+]
+patches_dir = "~/graphics/default/Modded-1.6.x/"
+pack_dir = "~/graphics_merged/default/Modded-1.6.x/"
+pack_format = 1
+
 ["default-modded-1.7.x"]
 mods_dirs = [
     "/Users/michael/Documents/ATLauncher.app/Contents/Java/instances/BeyondReality/mods",
@@ -46,6 +54,14 @@ patches_dir = "~/graphics/default/Modded-1.7.x/"
 pack_dir = "~/graphics_merged/default/Modded-1.7.x/"
 pack_format = 1
 
+["default-modded-1.8.x"]
+mods_dirs = [
+    "~/graphics/default/Downloaded-Mods-1.8.x/"
+]
+patches_dir = "~/graphics/default/Modded-1.8.x/"
+pack_dir = "~/graphics_merged/default/Modded-1.8.x/"
+pack_format = 1
+
 ["default-modded-1.10.x"]
 mods_dirs = [
     "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Beyond/.minecraft/mods",
@@ -54,6 +70,14 @@ mods_dirs = [
 patches_dir = "~/graphics/default/Modded-1.10.x/"
 pack_dir = "~/graphics_merged/default/Modded-1.10.x/"
 pack_format = 2
+
+["default-modded-1.11.x"]
+mods_dirs = [
+    "~/graphics/default/Downloaded-Mods-1.11.x/"
+]
+patches_dir = "~/graphics/default/Modded-1.11.x/"
+pack_dir = "~/graphics_merged/default/Modded-1.11.x/"
+pack_format = 3
 
 ["default-modded-1.12.x"]
 mods_dirs = [
@@ -122,6 +146,13 @@ patches_dir = "~/graphics/fanver/Modded-1.5.x/"
 pack_format = 1
 pack_dir = "~/graphics_merged/fanver/Modded-1.5.x/"
 
+["fanver-modded-1.6.x"]
+download_repo = "git@github.com:Soartex-Modded/Modded-1.6.x.git"
+download_dir = "~/graphics/fanver/Modded-1.6.x/"
+patches_dir = "~/graphics/fanver/Modded-1.6.x/"
+pack_format = 1
+pack_dir = "~/graphics_merged/fanver/Modded-1.6.x/"
+
 ["fanver-modded-1.7.x"]
 download_repo = "git@github.com:Soartex-Modded/Modded-1.7.x.git"
 download_dir = "~/graphics/fanver/Modded-1.7.x/"
@@ -133,12 +164,26 @@ link_dirs = [
     "/Applications/MultiMC.app/Contents/MacOS/instances/1.7.10/.minecraft/resourcepacks/Fanver_Modded"
 ]
 
+["fanver-modded-1.8.x"]
+download_repo = "git@github.com:Soartex-Modded/Modded-1.8.x.git"
+download_dir = "~/graphics/fanver/Modded-1.8.x/"
+patches_dir = "~/graphics/fanver/Modded-1.8.x/"
+pack_dir = "~/graphics_merged/fanver/Modded-1.8.x/"
+pack_format = 1
+
 ["fanver-modded-1.10.x"]
 download_repo = "git@github.com:Soartex-Modded/Modded-1.10.x.git"
 download_dir = "~/graphics/fanver/Modded-1.10.x/"
 patches_dir = "~/graphics/fanver/Modded-1.10.x/"
 pack_dir = "~/graphics_merged/fanver/Modded-1.10.x/"
 pack_format = 2
+
+["fanver-modded-1.11.x"]
+download_repo = "git@github.com:Soartex-Modded/Modded-1.11.x.git"
+download_dir = "~/graphics/fanver/Modded-1.11.x/"
+patches_dir = "~/graphics/fanver/Modded-1.11.x/"
+pack_dir = "~/graphics_merged/fanver/Modded-1.11.x/"
+pack_format = 3
 
 ["fanver-modded-1.12.x"]
 download_repo = "git@github.com:Soartex-Modded/Modded-1.12.x.git"
@@ -177,6 +222,12 @@ patches_dir = "~/graphics/invictus/Vanilla-1.12.x/"
 pack_dir = "~/graphics/invictus/Vanilla-1.12.x/Vanilla/"
 link_dirs = [
     "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Revelation/.minecraft/resourcepacks/Vanilla_Invictus"
+]
+
+["invictus-vanilla-1.12.x-tweaks"]
+pack_dir = "~/graphics/invictus/Vanilla-1.12.x-Tweaks/Vanilla/"
+link_dirs = [
+    "/Applications/MultiMC.app/Contents/MacOS/instances/FTB Revelation/.minecraft/resourcepacks/Vanilla_Invictus_Tweaks"
 ]
 
 ["invictus-modded-1.7.x"]

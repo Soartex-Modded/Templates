@@ -26,6 +26,46 @@ def test_gui_builder():
     output_image.save(test_path)
 
 
+def complete_graph_port(resource_pack_name):
+    import itertools
+    import timeit
 
-run("build_guis_fanver_1.7")
+    # reverse-order so that newer textures get priority
+    mc_versions = ['1.15.x', '1.12.x', '1.11.x', '1.10.x', '1.8.x', '1.7.x', '1.6.x', '1.5.x']
+    pipeline = []
+    for from_version, to_version in itertools.combinations_with_replacement(mc_versions, r=2):
+        pipeline.append({
+            "task": "port_patches",
+            "default_prior": f"default-modded-{from_version}",
+            "default_post": f"default-modded-{to_version}",
+            "resource_prior": f"{resource_pack_name}-modded-{from_version}",
+            "resource_post": f"{resource_pack_name}-modded-{to_version}",
+            "action": "copy"
+        })
+        if from_version != to_version:
+            pipeline.append({
+                "task": "port_patches",
+                "default_prior": f"default-modded-{to_version}",
+                "default_post": f"default-modded-{from_version}",
+                "resource_prior": f"{resource_pack_name}-modded-{to_version}",
+                "resource_post": f"{resource_pack_name}-modded-{from_version}",
+                "action": "copy"
+            })
+
+    # feeling sadistic
+    elapsed_times = [
+        timeit.Timer(
+            lambda: run(
+                f"{resource_pack_name}_complete_port",
+                pipelines={f"{resource_pack_name}_complete_port": pipeline}),
+            'gc.enable()').timeit(number=1)
+        for _ in range(5)
+    ]
+
+    for i, elapsed_time in enumerate(elapsed_times):
+        print(f"Elapsed time {i}: {elapsed_time}")
+
+
+complete_graph_port("fanver")
+# complete_graph_port("jstr")
 

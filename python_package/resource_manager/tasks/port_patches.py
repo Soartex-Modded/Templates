@@ -203,6 +203,9 @@ def port_patches(
             if prior_resource_path == post_resource_path:
                 continue
 
+            if os.path.exists(post_resource_path):
+                continue
+
             print()
             if len(matches) > 1:
                 print(f"Multiple matches found ({len(matches)}). Mapping from first:")

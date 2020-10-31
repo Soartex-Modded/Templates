@@ -73,8 +73,11 @@ def insert_placeholders(
                 os.remove(output_path)
 
             if scale != 1:
-                image = Image.open(file_path)
-                image.resize((image.width * scale, image.height * scale), resample=PIL.Image.NEAREST).save(output_path)
+                try:
+                    image = Image.open(file_path)
+                    image.resize((image.width * scale, image.height * scale), resample=PIL.Image.NEAREST).save(output_path)
+                except PIL.UnidentifiedImageError:
+                    pass
             else:
                 shutil.copy2(file_path, output_path)
 

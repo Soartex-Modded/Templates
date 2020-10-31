@@ -37,6 +37,9 @@ Textures are not ported if they are empty and existing textures are not overwrit
 Linked PRs:
 - https://github.com/Soartex-Modded/Modded-1.15.x/pull/2
 - https://github.com/Soartex-Modded/Modded-1.12.x/pull/43
+- https://github.com/Soartex-Modded/Modded-1.11.x/pull/3
 - https://github.com/Soartex-Modded/Modded-1.10.x/pull/59
+- https://github.com/Soartex-Modded/Modded-1.8.x/pull/3
 - https://github.com/Soartex-Modded/Modded-1.7.x/pull/193
+- https://github.com/Soartex-Modded/Modded-1.6.x/pull/58
 - https://github.com/Soartex-Modded/Modded-1.5.x/pull/2

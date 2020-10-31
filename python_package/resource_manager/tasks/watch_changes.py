@@ -40,12 +40,10 @@ class PatchSyncHandler(events.PatternMatchingEventHandler):
             return
 
         if event.event_type == events.EVENT_TYPE_CREATED:
+            os.makedirs(os.path.dirname(src_path), exist_ok=True)
             if event.is_directory:
                 copy_tree(event.src_path, src_path)
             else:
-                parent_dir = os.path.dirname(src_path)
-                if not os.path.exists(parent_dir):
-                    os.makedirs(parent_dir, exist_ok=True)
                 shutil.copyfile(event.src_path, src_path)
             print(f"created: {relative_src_path}")
 
@@ -53,6 +51,7 @@ class PatchSyncHandler(events.PatternMatchingEventHandler):
             if event.is_directory:
                 return
             else:
+                os.makedirs(os.path.dirname(src_path), exist_ok=True)
                 shutil.copyfile(event.src_path, src_path)
                 print(f"modified: {relative_src_path}")
 
@@ -64,6 +63,7 @@ class PatchSyncHandler(events.PatternMatchingEventHandler):
             dest_path = self.translate(event.dest_path)
             relative_dest_path = dest_path.replace(self.output_dir, "")
 
+            os.makedirs(os.path.dirname(dest_path), exist_ok=True)
             shutil.move(src_path, dest_path)
             print(f"""moved: {relative_src_path}\n    -> {relative_dest_path}""")
 

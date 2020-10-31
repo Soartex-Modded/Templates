@@ -35,7 +35,8 @@ def run_pipeline(config, resources, pipelines):
         'fix_mod_jsons': run_fix_mod_jsons,
         'build_guis': run_build_guis,
         'insert_placeholders': run_insert_placeholders,
-        'find_similar': run_find_similar
+        'find_similar': run_find_similar,
+        'detect_broken_animations': run_detect_broken_animations
     }
 
     if config['pipeline'] not in pipelines:
@@ -194,7 +195,7 @@ def run_run_subprocess(config, resources, pipelines):
     """run a task that executes a shell command within a folder in a resource"""
     print("Running subprocess.")
     print("cmd:", config['cmd'])
-    print("pwd:", config['folder'])
+    print("pwd:", resources[config['resource']][config['folder']])
     tasks.run_subprocess(cmd=config['cmd'], cwd=resources[config['resource']][config['folder']])
 
 
@@ -233,3 +234,9 @@ def run_find_similar(config, resources, pipelines):
         resource_patches_dir=resources[config['resource']]['patches_dir'],
         default_dir=resources[config['resource_default']]['pack_dir'],
         develop_dir=config.get('develop_dir'))
+
+
+def run_detect_broken_animations(config, resources, pipelines):
+    """run a task that assists in texturing many similar files at once"""
+    print("Detecting broken animations.")
+    tasks.detect_broken_animations(pack_dir=resources[config['resource']]['pack_dir'])

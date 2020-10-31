@@ -2,7 +2,6 @@ import json
 import os
 import tempfile
 import zipfile
-import shutil
 import re
 from distutils.dir_util import copy_tree
 
@@ -14,7 +13,7 @@ def extract_default(mods_dirs, output_dir):
     :param mods_dirs: list of directories, each containing a collection of mod .zip files
     :param output_dir: location to place resource files
     """
-    extensions = ('.info', '.mcmeta', '.png', '.properties')
+    extensions = ('.info', '.mcmeta', '.png', '.properties', '.json')
 
     output_dir = os.path.expanduser(output_dir)
     os.makedirs(output_dir, exist_ok=True)
