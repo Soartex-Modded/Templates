@@ -1,7 +1,0 @@
-setuptools>=41.4.0
-numpy>=1.19.2
-requests>=2.24.0
-toml>=0.10.1
-Pillow>=8
-# Tkinter
-scipy>=1.5.3
